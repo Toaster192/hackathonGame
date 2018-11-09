@@ -3,7 +3,7 @@ import pygame
 from GameObject import GameObject
  
  
-class Brick(GameObject):
+class Tile(GameObject):
     def __init__(self, x, y, w, h, color, special_effect=None):
         GameObject.__init__(self, x, y, w, h)
         self.color = color
