@@ -3,7 +3,7 @@ from src.PlaceholderGame import PlaceholderGame
 
 def main():
     game = PlaceholderGame()
-    game.init_screen((640, 480))
+    game.init_screen('Cool game', (640, 480))
     game.run()
 
 

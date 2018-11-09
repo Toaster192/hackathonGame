@@ -8,9 +8,10 @@ class Game:
         self.running = False
         self._time = 0
 
-    def init_screen(self, size):
+    def init_screen(self, window_name, size):
         pygame.init()
         self.surface = pygame.display.set_mode(size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        pygame.display.set_caption(window_name)
 
     def _clean_up(self):
         self.clean_up()
