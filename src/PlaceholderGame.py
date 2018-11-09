@@ -24,11 +24,13 @@ class PlaceholderGame(Game):
 
     # Called every frame, dt is time between frames
     def loop(self, dt):
-        self.fps = 0 if dt == 0 else int(1000 / dt)
+        self.fps = 0 if dt == 0 else int(1 / dt)
 
     # Called after loop(), renders the game screen
     def render(self):
         self.surface.fill(Color.BLACK)
+
+        pygame.draw.rect(self.surface, Color.RED, pygame.Rect(10, 20, 50, 50))
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
