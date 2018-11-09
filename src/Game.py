@@ -1,10 +1,12 @@
 import pygame
+from time import time
 
 
 class Game:
     def __init__(self):
         self.surface = None
         self.running = False
+        self._time = 0
 
     def init_screen(self, size):
         pygame.init()
@@ -25,7 +27,7 @@ class Game:
     def handle_event(self, event):
         pass
 
-    def loop(self):
+    def loop(self, dt):
         raise NotImplementedError()
 
     def render(self):
@@ -33,9 +35,12 @@ class Game:
 
     def run(self):
         self.running = True
+        self._time = time()
         while self.running:
+            newtime = time()
             for event in pygame.event.get():
                 self._handle_event(event)
-            self.loop()
+            self.loop(newtime - self._time)
             self.render()
+            self._time = newtime
         self._clean_up()
