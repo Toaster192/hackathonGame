@@ -1,6 +1,6 @@
 import pygame
  
-from GameObject import GameObject
+from src.GameObject import GameObject
  
  
 class Tile(GameObject):
