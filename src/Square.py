@@ -4,7 +4,7 @@ from src.GameObject import GameObject
  
  
 class Square(GameObject):
-    def __init__(self, x, y, w=32, h=32, color):
+    def __init__(self, x, y, color, w=32, h=32):
         GameObject.__init__(self, x, y, w, h)
         self.color = color
  
