@@ -45,7 +45,7 @@ class Game:
         while self.running:
             for event in pygame.event.get():
                 self._handle_event(event)
-            self.loop(self.clock.get_time())
+            self.loop(self.clock.get_time()/1000)
             self.render()
             self.clock.tick(60)
         self._clean_up()
