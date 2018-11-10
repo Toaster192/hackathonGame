@@ -13,11 +13,7 @@ class Player:
         self.right = False
         self.v_x = 0
         self.v_y = 0
-<<<<<<< HEAD
-        self.speed = 5
-=======
         self.speed = Config.PLAYER_MAX_SPEED
->>>>>>> 4ba55bc214804c26507f26da3272ae92f428c07b
 
     def moveLeft(self):
         if self.v_x <= (-self.speed + 1):
