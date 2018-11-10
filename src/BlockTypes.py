@@ -1,7 +1,7 @@
-L = ((0, 0), (32, 0), (64, 0), (0, 32))
-O = ((0, 0), (0, 32), (32, 0), (32, 32))
-Z = ((0, 0), (0, 32), (32, 32), (32, 64))
-I = ((0, 0), (0, 32), (0, 64), (0, 96))
-T = ((0, 0), (0, 32), (0, 64), (32, 32))
+L = ((0, 0), (1*BLOCK_WIDTH, 0), (2*BLOCK_WIDTH, 0), (0, 1*BLOCK_WIDTH))
+O = ((0, 0), (0, 1*BLOCK_WIDTH), (1*BLOCK_WIDTH, 0), (1*BLOCK_WIDTH, 1*BLOCK_WIDTH))
+Z = ((0, 0), (0, 1*BLOCK_WIDTH), (1*BLOCK_WIDTH, 1*BLOCK_WIDTH), (1*BLOCK_WIDTH, 2*BLOCK_WIDTH))
+I = ((0, 0), (0, 1*BLOCK_WIDTH), (0, 2*BLOCK_WIDTH), (0, 3*BLOCK_WIDTH))
+T = ((0, 0), (0, 1*BLOCK_WIDTH), (0, 2*BLOCK_WIDTH), (1*BLOCK_WIDTH, 1*BLOCK_WIDTH))
 
 array = (L, O, Z, I, T)
