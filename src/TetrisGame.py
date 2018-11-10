@@ -37,8 +37,12 @@ class TetrisGame(Game):
                               'img/p2_left.png', 'img/p2_right.png')
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
         self.wasted_font = pygame.font.Font('FreeMono.ttf', 46)
+        self.wasted_font.set_bold(True)
         self.wasted_surface = \
-            self.wasted_font.render('YOU DEAD!', True, Color.RED)
+            self.wasted_font.render('YOU DEAD!', True, Color.WHITE)
+        self.wasted_bg = pygame.image.load('img/blood-splash.png')
+        self.wasted_bg.get_rect().width = self.wasted_surface.get_rect().width * 1.5
+        self.wasted_bg.get_rect().height = self.wasted_surface.get_rect().height * 1.5
 
     # Gets called at game end (pressed [X])
     def clean_up(self):
@@ -93,9 +97,13 @@ class TetrisGame(Game):
         self.surface.blit(fps_surface, (0, 0))
 
         if self.player1.dead:
+            self.surface.blit(self.wasted_bg, (
+                Config.SCREEN_WIDTH//2 - self.wasted_bg.get_rect().width//2,
+                Config.SCREEN_HEIGHT//1.8 - self.wasted_bg.get_rect().height//2))
             self.surface.blit(self.wasted_surface, (
                 Config.SCREEN_WIDTH//2 - self.wasted_surface.get_rect().width//2,
                 Config.SCREEN_HEIGHT//2 - self.wasted_surface.get_rect().height//2))
+            
 
         pygame.display.update()
 
