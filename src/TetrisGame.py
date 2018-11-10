@@ -14,7 +14,7 @@ class TetrisGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
-        self.block_speed = (0, 150)
+        self.block_speed = Config.BLOCK_SPEED
         self.generator = BlockGenerator()
         self.player1 = None
         self.blocks = [self.generator.generate(self.block_speed)]
@@ -71,9 +71,5 @@ class TetrisGame(Game):
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
         self.surface.blit(fps_surface, (0, 0))
-
-        can_double_jump_surface = \
-            self.fps_font.render('Can double jump?: ' + str(self.player1.can_double_jump), True, Color.GRAY)
-        self.surface.blit(can_double_jump_surface, (0, 50))
 
         pygame.display.update()
