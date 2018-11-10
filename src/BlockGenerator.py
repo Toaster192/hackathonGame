@@ -12,17 +12,18 @@ class BlockGenerator():
 
 		# Rotate - TODO
 		width = max(map((lambda t: t[0]), generated_type)) + 32
-		height = max(map((lambda t: t[1], generated_type)) + 32
+		height = max(map((lambda t: t[1]), generated_type)) + 32
 
 		y = 0 - height
 
-		# AI 
+		# AI
 
 		x = random.randint(0, (sirka_okna-width)//32) * 32
 
 		color = random.choice(Colors.colors)
 
 		block = Block(x, y, width, height, generated_type, 
-			          speed, "active", color)
-		
+			          speed, "falling", color)
+
 		return block
+
