@@ -66,8 +66,6 @@ class PlaceholderGame(Game):
             self.player1.left = False
             self.player1.right = False
             self.player1.facing = True
-        if keys[pygame.K_UP]:
-            self.player1.jump()
 
         if (int(self.player1.x) <
                 int(Config.GAMEFIELD_LEFT_BORDER) - self.player1.v_x):
@@ -79,6 +77,29 @@ class PlaceholderGame(Game):
             self.player1.v_x = 0
             self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
                               Config.PLAYER_WIDTH)
+
+        if not(self.player1.jumping):
+            if keys[pygame.K_UP]:
+                self.player1.jumping = True
+                self.player1.right = False
+                self.player1.left = False
+                self.player1.walkCount = 0
+        else:
+            if self.player1.jumpspeed <= 10:
+                neg = -1
+                if self.player1.jumpspeed > 0:
+                    neg = 1
+                self.player1.v_y = (self.player1.jumpspeed ** 2) * 0.2 * neg
+                print(self.player1.v_y)
+                self.player1.jumpspeed += 1
+
+        if (int(self.player1.y) >
+                int(Config.GAMEFIELD_BOTTOM_BORDER - Config.PLAYER_HEIGHT) - self.player1.v_y):
+            self.player1.v_y = 0
+            self.player1.y = (Config.GAMEFIELD_BOTTOM_BORDER -
+                              Config.PLAYER_HEIGHT)
+            self.player1.jumping = False
+            self.player1.jumpspeed = -10
 
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
