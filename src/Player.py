@@ -9,8 +9,10 @@ class Player:
         self.height = height
         self.color = color
         self.jumping = False
+        self.facing = True
         self.left = False
         self.right = False
+        self.jumpspeed = 10
         self.v_x = 0
         self.v_y = 0
         self.speed = Config.PLAYER_MAX_SPEED
