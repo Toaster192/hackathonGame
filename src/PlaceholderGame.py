@@ -1,6 +1,11 @@
 import pygame
 from src.Game import Game
 import src.Colors as Color
+<<<<<<< HEAD
+=======
+import src.Config as Config
+# from src.TilePainter import paint_tile
+>>>>>>> 4ba55bc214804c26507f26da3272ae92f428c07b
 from src.Player import Player
 
 
@@ -10,8 +15,13 @@ class PlaceholderGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
+<<<<<<< HEAD
         self.player1 = Player(50, 50, 16, 40, Color.RED)
         print("halo")
+=======
+        self.player1 = Player(50, 50, Config.PLAYER_WIDTH,
+                              Config.PLAYER_HEIGHT, Color.RED)
+>>>>>>> 4ba55bc214804c26507f26da3272ae92f428c07b
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -48,9 +58,24 @@ class PlaceholderGame(Game):
 
     def render(self):
         self.surface.fill(Color.BLACK)
+<<<<<<< HEAD
 
         pygame.draw.rect(self.surface, self.player1.color, pygame.Rect(
             self.player1.x, self.player1.y, self.player1.width, self.player1.height))
+=======
+        self.game_field.draw(self.surface)
+
+        # paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
+        # paint_tile(self.surface, 20, 148, 128, 128, Color.GREEN)
+        # paint_tile(self.surface, 148, 20, 128, 128, Color.BLUE)
+        # paint_tile(self.surface, 148, 148, 128, 128, Color.MAGENTA)
+
+        # paint_tile(self.surface, 60, 300, 16, 16, Color.ORANGE)
+
+        pygame.draw.rect(self.surface, self.player1.color,
+                         pygame.Rect(self.player1.x, self.player1.y,
+                                     self.player1.width, self.player1.height))
+>>>>>>> 4ba55bc214804c26507f26da3272ae92f428c07b
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
