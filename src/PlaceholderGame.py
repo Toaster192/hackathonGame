@@ -16,9 +16,10 @@ class PlaceholderGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
-        self.player1 = Player(50, 50, Config.PLAYER_WIDTH,
+        self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
-        self.block = Block(5,100,256,256,BlockTypes.array[2],(0, 1),0,Color.BLACK)
+        self.block = Block(
+            5, 100, 256, 256, BlockTypes.array[2], (0, 1), 0, Color.BLACK)
 
         self.emitter = ParticleFieldEmitter(color_begin=Color.GRAY,
                                             color_end=Color.BLACK,

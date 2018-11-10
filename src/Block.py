@@ -3,7 +3,7 @@ from src.GameObject import GameObject
 
 
 class Block(GameObject):
-    def __init__(self, x, y, width, height, array, speed, falling, state, color):
+    def __init__(self, x, y, width, height, array, speed, falling, color):
         super(Block, self).__init__(x, y, width, height, speed)
         self.x = x
         self.y = y
@@ -11,10 +11,9 @@ class Block(GameObject):
         self.bounds.height = height
         self.array = array
         self.speed = speed
-        self.state = state
         self.color = color
         self.falling = falling
-        self.objects = list(map(lambda t: createBlock(t[0], t[1]), array))
+        self.objects = list(map(lambda t: self.createBlock(t[0], t[1]), array))
 
     def createBlock(self, x, y):
         return Square(self.x + x, self.y + y, self.color, self.speed)

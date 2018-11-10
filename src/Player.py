@@ -12,7 +12,8 @@ class Player:
         self.facing = True
         self.left = False
         self.right = False
-        self.jumpspeed = 10
+        self.jumpspeed = -10
+        self.walkCount = 0
         self.v_x = 0
         self.v_y = 0
         self.speed = Config.PLAYER_MAX_SPEED
