@@ -26,7 +26,7 @@ class BlockGenerator():
 
         color = random.choice(Colors.colors)
 
-        block = Block(x, y, width, height, generated_type,
+        block = Block(float(x), float(y), float(width), float(height), generated_type,
                       speed, True, color)
 
         return block

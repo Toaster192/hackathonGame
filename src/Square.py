@@ -4,10 +4,11 @@ from src.GameObject import GameObject
 #from src.PlaceholderGame import PlaceholderGame.get_grounded_squares as grounded_squares
 from src.TilePainter import paint_tile
 import src.Colors as Colors
+import src.Config as Config
 
 
 class Square(GameObject):
-    def __init__(self, x, y, color, speed, w=32, h=32):
+    def __init__(self, x, y, color, speed, w=Config.BLOCK_WIDTH, h=Config.BLOCK_HEIGHT):
         super().__init__(x, y, w, h, speed)
         self.color = color
 

@@ -17,9 +17,11 @@ class PlaceholderGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
+        self.block_speed = (0, 50)
+        self.generator = BlockGenerator()
         self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
-        self.block = BlockGenerator.generate((0,50))
+        self.block = self.generator.generate(self.block_speed)
 
         self.emitter = ParticleFieldEmitter(
             colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] +
@@ -27,7 +29,7 @@ class PlaceholderGame(Game):
                                         Color.darker(Color.DARK_GRAY, 2),
                                         Color.BLACK]),
             pos=(256, 256), size=(32, 8), velocity=(16, -8),
-            velocity_jitter=(4, 4), accel=(0, -4), gen_delay=0.01, duration=4,
+            velocity_jitter=(4, 4), accel=(0, -4), gen_delay=0.1, duration=4,
             sizes=[3, 5, 8, 6, 8, 16])
 
     # Gets called at the start of the game
@@ -79,7 +81,7 @@ class PlaceholderGame(Game):
                               Config.PLAYER_WIDTH)
 
         if pygame.event.poll().type == pygame.USEREVENT:
-            self.block = BlockGenerator.generate((0,50))
+            self.block = generator.generate((0,50))
         if not(self.player1.jumping):
             if keys[pygame.K_UP]:
                 self.player1.jumping = True
