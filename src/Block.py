@@ -40,3 +40,7 @@ class Block(GameObject):
 
         for square in self.objects:
             square.update(dt)
+
+        if self.speed != (0, 0):
+            self.x += self.speed[0] * dt
+            self.y += self.speed[1] * dt
