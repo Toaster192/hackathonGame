@@ -1,10 +1,9 @@
-from src import PlaceholderGame
+from src import TetrisGame
 import src.Config as Config
-from src.Vector import Vector2
 
 
 def main():
-    game = PlaceholderGame()
+    game = TetrisGame()
     game.init('Cool game', (Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
     game.run()
 

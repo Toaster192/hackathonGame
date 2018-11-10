@@ -1,1 +1,1 @@
-from .PlaceholderGame import PlaceholderGame
+from .TetrisGame import TetrisGame
