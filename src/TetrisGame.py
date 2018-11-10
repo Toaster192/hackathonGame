@@ -9,20 +9,25 @@ from src.Player import Player
 
 
 class TetrisGame(Game):
+    particle_hooks = []
+
     def __init__(self):
-        self.game_field = GameField()
         super().__init__()
+        self.game_field = GameField()
         self.fps_font = None
         self.fps = 0
         self.block_speed = Config.BLOCK_SPEED
         self.generator = BlockGenerator()
         self.player1 = None
-        self.blocks = [self.generator.generate(self.block_speed)]
+        self.blocks = []
         self.dead = False
 
     # Gets called at the start of the game
     def init(self, window_name, size):
         super().init(window_name, size)
+
+        self.blocks.append(self.generator.generate(self.block_speed))
+
         self.player1 = Player(Config.GAMEFIELD_LEFT_BORDER +
                               (Config.GAMEFIELD_WIDTH // 2),
                               Config.GAMEFIELD_BOTTOM_BORDER -
@@ -57,25 +62,22 @@ class TetrisGame(Game):
                 block.move(dt, self.blocks[:i] + self.blocks[i+1:],
                            Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING)
 
+        for particle in self.particle_hooks:
+            particle.update(dt)
+
     # Called after loop(), renders the game screen
     def render(self):
         self.surface.fill(Color.BLACK)
 
         self.game_field.render(self.surface)
 
-        # paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
-        # paint_tile(self.surface, 20, 148, 128, 128, Color.GREEN)
-        # paint_tile(self.surface, 148, 20, 128, 128, Color.BLUE)
-        # paint_tile(self.surface, 148, 148, 128, 128, Color.MAGENTA)
-
-        # paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
-
         for block in self.blocks:
             block.render(self.surface)
 
         self.player1.render(self.surface)
 
-        # self.emitter.render(self.surface)
+        for particle in self.particle_hooks:
+            particle.render(self.surface)
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
@@ -85,3 +87,11 @@ class TetrisGame(Game):
             self.surface.blit(self.wasted_surface, (0, 50))
 
         pygame.display.update()
+
+
+def add_particles(particles):
+    TetrisGame.particle_hooks.append(particles)
+
+
+def remove_particles(particles):
+    TetrisGame.particle_hooks.remove(particles)

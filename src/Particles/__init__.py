@@ -1,1 +1,2 @@
+from .ParticleFieldEmitOnce import ParticleFieldEmitOnce
 from .ParticleFieldEmitter import ParticleFieldEmitter

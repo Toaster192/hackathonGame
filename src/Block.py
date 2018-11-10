@@ -1,8 +1,11 @@
 import pygame
 
+import src.Colors as Color
 import src.Config as Config
 from src.GameObject import GameObject
+from src.Particles import ParticleFieldEmitOnce
 from src.Square import Square
+from src.Vector import Vector2
 
 
 class Block(GameObject):
@@ -30,16 +33,25 @@ class Block(GameObject):
         for square in self.objects:
             if square.detects_collision(blocks) and self.falling:
                 self.falling = False
-                for square in self.objects:
-                    square.speed = (0, 0)
+                for ssquare in self.objects:
+                    ssquare.speed = (0, 0)
                     # ONE-LINER - DON'T ASK,
                     # DON'T WANT ME TO DO ANYTHING WITH IT AGAIN
-                    square.bounds.y = (Config.GAMEFIELD_BOTTOM_BORDER - 1 -
+                    ssquare.bounds.y = (Config.GAMEFIELD_BOTTOM_BORDER - 1 -
                                        ((Config.GAMEFIELD_BOTTOM_BORDER -
-                                        (square.bounds.y)) //
+                                         (ssquare.bounds.y)) //
                                         Config.BLOCK_HEIGHT) *
                                        Config.BLOCK_HEIGHT)
                 self.speed = (0, 0)
+                ParticleFieldEmitOnce(colors=[Color.WHITE, Color.GRAY],
+                                      pos=Vector2(square.bounds.x,
+                                                  square.bounds.y + square.bounds.h),
+                                      size=Vector2(square.bounds.w, 0),
+                                      velocity=Vector2(0, -20),
+                                      velocity_jitter=Vector2(20, 10),
+                                      accel=Vector2(0, 30), gen_delay=0.001,
+                                      duration=1, sizes=[2, 0],
+                                      emitter_duration=0.1)
                 #event = pygame.event.Event(pygame.USEREVENT,
                 #                           {"ev": "block_fell"})
 

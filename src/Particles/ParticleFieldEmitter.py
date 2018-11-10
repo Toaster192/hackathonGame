@@ -1,7 +1,8 @@
-from time import time
 from random import uniform
-from .Particle import Particle
+from time import time
+
 from src.Vector import Vector2
+from .Particle import Particle
 
 
 class ParticleFieldEmitter:
@@ -22,8 +23,8 @@ class ParticleFieldEmitter:
     def __del__(self):
         self.particles.clear()
 
-    def update(self, dt):
-        while self.next_particle_time < time():
+    def update(self, dt, spawn_particles=True):
+        while self.next_particle_time < time() and spawn_particles:
             random_pos = self.pos + Vector2(uniform(0, self.size.x),
                                             uniform(0, self.size.y))
             j = self.velocity_jitter
