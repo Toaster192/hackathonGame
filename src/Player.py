@@ -23,6 +23,7 @@ class Player:
         self.walkCount = 0
         self.v = Vector2(0, 0)
         self.speed = Config.PLAYER_MAX_SPEED
+        self.dead = False
 
         pygame.display.init()
         self.image = pygame.image.load('img/face_calm.png')
@@ -127,10 +128,11 @@ class Player:
         else:
             top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:
-                self.v.y = Config.BLOCK_SPEED[1] * 1.5
+                self.v.y = Config.BLOCK_SPEED[1]
                 self.pos.y = top_border + 3
-                event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
-                pygame.event.post(event)
+                if self.check_collision_down(surroundings) <= 1:
+                    event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
+                    pygame.event.post(event)
 
         # self.emitter.pos = self.pos
         # self.emitter.update(dt)
