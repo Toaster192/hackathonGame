@@ -4,7 +4,6 @@ import pygame
 
 import src.Colors as Color
 import src.Config as Config
-import src.util as util
 from .Particles import ParticleFieldEmitter
 from .Vector import Vector2
 
@@ -215,11 +214,8 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and
-                << << << < HEAD
-                self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-                == == ===self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
-                    self.pos.y + Config.PLAYER_HEIGHT - 4):
+               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+               self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = min(border, square.bounds.x)
         return border
 
@@ -227,10 +223,8 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and
-                << << << < HEAD
-                self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-                == == ===self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
+               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
                     self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
@@ -239,11 +233,8 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and
-                << << << < HEAD
-                self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-                == == ===self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
-                    self.pos.x + Config.PLAYER_WIDTH):
+               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+               self.pos.x + Config.PLAYER_WIDTH):
                 border = min(border, square.bounds.y)
         return border
 
@@ -251,10 +242,7 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.y < self.pos.y and
-                << << << < HEAD
-                self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-                == == ===self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
-                    self.pos.x + Config.PLAYER_WIDTH):
+               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+               self.pos.x + Config.PLAYER_WIDTH):
                 border = max(border, square.bounds.y + Config.BLOCK_HEIGHT)
         return border
