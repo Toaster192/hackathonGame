@@ -1,7 +1,9 @@
-import pygame
 from time import time
-from src.util import interpolate
+
+import pygame
+
 from src.Vector import Vector3
+from src.util import interpolate
 
 
 class Particle:
@@ -21,7 +23,7 @@ class Particle:
         self.velocity += self.accel * dt
         self.pos += self.velocity * dt
 
-    def render(self, surface):
+    def render(self, surface, offset):
         if self.start_time + self.duration < time():
             return
 
@@ -31,4 +33,4 @@ class Particle:
                             life)
 
         pygame.draw.circle(surface, color.floor().tuple(),
-                           self.pos.floor().tuple(), int(size))
+                           (self.pos + offset).floor().tuple(), int(size))

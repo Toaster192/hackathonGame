@@ -20,5 +20,5 @@ class ParticleFieldEmitOnce(ParticleFieldEmitter):
             return
         super().update(dt, spawn_particles=(time() < self.spawn_time + self.emitter_duration))
 
-    def render(self, surface):
-        super().render(surface)
+    def render(self, surface, offset):
+        super().render(surface, offset)

@@ -6,6 +6,8 @@ from src.BlockGenerator import BlockGenerator
 from src.Game import Game
 from src.GameField import GameField
 from src.Player import Player
+from src.StaticStore import StaticStore
+from src.Vector import Vector2
 
 
 class TetrisGame(Game):
@@ -31,7 +33,8 @@ class TetrisGame(Game):
                               (Config.GAMEFIELD_WIDTH // 2),
                               Config.GAMEFIELD_BOTTOM_BORDER -
                               Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
-                              Config.PLAYER_HEIGHT, Color.BLACK, 'img/p2_left.png', 'img/p2_right.png')
+                              Config.PLAYER_HEIGHT, Color.BLACK,
+                              'img/p2_left.png', 'img/p2_right.png')
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
         self.wasted_font = pygame.font.Font('FreeMono.ttf', 46)
         self.wasted_surface = \
@@ -53,13 +56,20 @@ class TetrisGame(Game):
     def loop(self, dt):
         self.fps = 0 if dt == 0 else int(1 / dt)
 
+        StaticStore.offset = StaticStore.displacement_offset + Vector2.random(
+            StaticStore.screen_shake, StaticStore.screen_shake)
+        StaticStore.screen_shake *= dt/Config.GRAPHICS_SCREENSHAKE_DAMPENING
+
         keys = pygame.key.get_pressed()
         self.player1.update(dt, keys, self.blocks)
 
         for i, block in enumerate(self.blocks):
-            if block.falling:
-                block.move(dt, self.blocks[:i] + self.blocks[i+1:],
-                           Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING)
+            if block.y + StaticStore.offset.y > Config.SCREEN_HEIGHT + block.bounds.height:
+                self.blocks.remove(block)
+            elif block.falling:
+                block.move(dt, self.blocks[:i] + self.blocks[i + 1:],
+                           (
+                                       Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING) - StaticStore.offset.y)
 
         for particle in self.particle_hooks:
             particle.update(dt)
@@ -71,12 +81,12 @@ class TetrisGame(Game):
         self.game_field.render(self.surface)
 
         for block in self.blocks:
-            block.render(self.surface)
+            block.render(self.surface, StaticStore.offset)
 
-        self.player1.render(self.surface)
+        self.player1.render(self.surface, StaticStore.offset)
 
         for particle in self.particle_hooks:
-            particle.render(self.surface)
+            particle.render(self.surface, StaticStore.offset)
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)

@@ -42,6 +42,6 @@ class ParticleFieldEmitter:
         for particle in self.particles:
             particle.update(dt)
 
-    def render(self, surface):
+    def render(self, surface, offset):
         for particle in self.particles:
-            particle.render(surface)
+            particle.render(surface, offset)

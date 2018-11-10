@@ -61,7 +61,7 @@ class GameObject:
     def centery(self):
         return self.bounds.centery
 
-    def render(self, surface):
+    def render(self, surface, offset):
         pass
 
     def move(self, dt, dx, dy):

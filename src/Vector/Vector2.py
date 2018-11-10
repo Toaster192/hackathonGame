@@ -1,5 +1,8 @@
 import numbers
+from random import uniform
 from re import match
+
+import pygame
 
 from . import Vector3
 
@@ -9,11 +12,18 @@ class Vector2:
         self.x = x
         self.y = y
 
+    @staticmethod
+    def random(dx, dy):
+        return Vector2(uniform(-dx, dx), uniform(-dy, dy))
+
     def tuple(self):
         return self.x, self.y
 
     def floor(self):
         return Vector2(int(self.x), int(self.y))
+
+    def to_rect(self, size):
+        return pygame.Rect(self.x, self.y, size.x, size.y)
 
     def __add__(self, other):
         if not isinstance(other, Vector2):

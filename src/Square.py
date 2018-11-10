@@ -30,8 +30,8 @@ class Square(GameObject):
             (x + w, y)
         ])
 
-    def render(self, surface):
-        self.paint_tile(surface, self.bounds.x, self.bounds.y, self.bounds.w,
+    def render(self, surface, offset):
+        self.paint_tile(surface, self.bounds.x + offset.x, self.bounds.y + offset.y, self.bounds.w,
                         self.bounds.height, self.color)
 
     def detects_collision(self, blocks):

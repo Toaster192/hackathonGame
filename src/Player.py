@@ -4,6 +4,7 @@ import pygame
 
 import src.Colors as Color
 import src.Config as Config
+from src.StaticStore import StaticStore
 from .Particles import ParticleFieldEmitter
 from .Vector import Vector2
 
@@ -107,7 +108,12 @@ class Player(pygame.sprite.Sprite):
         self.v.x *= 1 if dt == 0 else 0.01 / dt
 
     def update(self, dt, keys, blocks):
+        if self.pos.y + StaticStore.offset.y > Config.SCREEN_HEIGHT + Config.PLAYER_HEIGHT:
+            event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
+            pygame.event.post(event)
+
         surroundings = self.calculate_surroundings(blocks)
+        # print("self_pos:{0}".format(self.pos.x))
         if keys[pygame.K_LEFT]:
             if self.left:
                 self.walkCount += 1
@@ -190,13 +196,8 @@ class Player(pygame.sprite.Sprite):
         # self.emitter.pos = self.pos
         # self.emitter.update(dt)
 
-    def render(self, surface):
-        #    pygame.draw.rect(surface, self.color,
-        #                     pygame.Rect(self.pos.x, self.pos.y, self.size.x,
-        #                                 self.size.y))
-
-        surface.blit(self.render_p, pygame.Rect(self.pos.x, self.pos.y,
-                                                self.size.x, self.size.x))
+    def render(self, surface, offset):
+        surface.blit(self.render_p, (self.pos + offset).to_rect(self.size))
         # self.emitter.render(surface)
 
     def calculate_surroundings(self, blocks):
@@ -213,7 +214,7 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and
-                self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                    self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
                     self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = min(border, square.bounds.x)
         return border
@@ -222,7 +223,7 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and
-                self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                    self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
                     self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
@@ -231,7 +232,7 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and
-                self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                    self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
                     self.pos.x + Config.PLAYER_WIDTH):
                 border = min(border, square.bounds.y)
         return border
@@ -240,7 +241,7 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.y < self.pos.y and
-                self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                    self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
                     self.pos.x + Config.PLAYER_WIDTH):
                 border = max(border, square.bounds.y + Config.BLOCK_HEIGHT)
         return border
