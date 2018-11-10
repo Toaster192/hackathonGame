@@ -5,6 +5,8 @@ import src.Config as Config
 from .Particles import ParticleFieldEmitter
 from .Vector import Vector2
 
+from threading import Timer
+
 
 class Player:
     def __init__(self, x, y, width, height, color):
@@ -16,12 +18,14 @@ class Player:
         self.left = False
         self.right = False
         self.jumpspeed = Config.PLAYER_JUMP_SPEED
+        self.can_double_jump = False
+        self.double_jump_cooldown = Config.PLAYER_DEOUBLEJUMP_COOLDOWN
         self.walkCount = 0
         self.v = Vector2(0, 0)
         self.speed = Config.PLAYER_MAX_SPEED
 
         pygame.display.init()
-        self.image = pygame.image.load('face.png')
+        self.image = pygame.image.load('img/face_calm.png')
         self.image.convert()
         self.image = pygame.transform.scale(self.image,
                                             (Config.PLAYER_WIDTH,
@@ -51,10 +55,24 @@ class Player:
         if self.v.x > self.speed:
             self.v.x = self.speed
 
+    def allow_double_jump(self):
+        self.can_double_jump = True
+
     def jump(self):
         if not self.jumping:
             self.jumping = True
             self.v.y = -self.jumpspeed
+            self.image = pygame.image.load('img/face_excited.png')
+            self.image.convert()
+            self.image = pygame.transform.scale(self.image,
+                                                (Config.PLAYER_WIDTH,
+                                                Config.PLAYER_WIDTH))
+            Timer(self.double_jump_cooldown, self.allow_double_jump).start()
+            #self.allow_double_jump()
+        else:
+            if self.can_double_jump:
+                self.can_double_jump = False
+                self.v.y = -self.jumpspeed
 
     def stopMoving(self, dt):
         self.v.x *= 1 if dt == 0 else 0.01 / dt
@@ -101,6 +119,11 @@ class Player:
             self.v.y = 0
             self.pos.y = (bottom_border - Config.PLAYER_HEIGHT)
             self.jumping = False
+            self.image = pygame.image.load('img/face_calm.png')
+            self.image.convert()
+            self.image = pygame.transform.scale(self.image,
+                                                (Config.PLAYER_WIDTH,
+                                                Config.PLAYER_WIDTH))
         else:
             top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:

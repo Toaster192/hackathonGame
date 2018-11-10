@@ -69,4 +69,8 @@ class TetrisGame(Game):
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
         self.surface.blit(fps_surface, (0, 0))
 
+        can_double_jump_surface = \
+            self.fps_font.render('Can double jump?: ' + str(self.player1.can_double_jump), True, Color.GRAY)
+        self.surface.blit(can_double_jump_surface, (0, 50))
+
         pygame.display.update()
