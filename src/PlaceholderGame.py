@@ -21,7 +21,7 @@ class PlaceholderGame(Game):
         self.generator = BlockGenerator()
         self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
-        self.block = self.generator.generate(self.block_speed)
+        self.blocks = [self.generator.generate(self.block_speed)]
 
         self.emitter = ParticleFieldEmitter(
             colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] +
@@ -43,7 +43,9 @@ class PlaceholderGame(Game):
 
     # Gets called on PyGame event
     def handle_event(self, event):
-        pass
+        print(event)
+        if event.type == pygame.USEREVENT:
+            self.blocks.append(self.generator.generate((0, 50)))
 
     # Called every frame, dt is time between frames
     def loop(self, dt):
@@ -80,8 +82,6 @@ class PlaceholderGame(Game):
             self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
                               Config.PLAYER_WIDTH)
 
-        if pygame.event.poll().type == pygame.USEREVENT:
-            self.block = generator.generate((0,50))
         if not(self.player1.jumping):
             if keys[pygame.K_UP]:
                 self.player1.jumping = True
@@ -108,7 +108,7 @@ class PlaceholderGame(Game):
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
 
-        self.block.move(dt)
+        self.blocks[len(self.blocks) - 1].move(dt)
 
         self.emitter.update(dt)
 
@@ -129,7 +129,8 @@ class PlaceholderGame(Game):
 
         paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
 
-        self.block.draw(self.surface)
+        for block in self.blocks:
+            block.draw(self.surface)
         pygame.draw.rect(self.surface, self.player1.color,
                          pygame.Rect(self.player1.x, self.player1.y,
                                      self.player1.width, self.player1.height))

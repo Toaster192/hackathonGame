@@ -19,10 +19,9 @@ class BlockGenerator():
                          generated_type)) + Config.BLOCK_WIDTH
 
         y = - height
-
-        x = random.randint(0,
-                           (Config.SCREEN_WIDTH - width)
-                           // Config.BLOCK_WIDTH) * Config.BLOCK_WIDTH
+        print(Config.GAMEFIELD_LEFT_BORDER)
+        print(Config.GAMEFIELD_RIGHT_BORDER - width)
+        x = Config.GAMEFIELD_LEFT_BORDER + random.randint(0, 16 - width // Config.BLOCK_WIDTH) * Config.BLOCK_WIDTH
 
         color = random.choice(Colors.colors)
 
