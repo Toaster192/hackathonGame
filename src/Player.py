@@ -108,7 +108,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt, keys, blocks):
         surroundings = self.calculate_surroundings(blocks)
-
+        print("self_pos:{0}".format(self.pos.x))
         if keys[pygame.K_LEFT]:
             if self.left:
                 self.walkCount += 1
@@ -118,11 +118,11 @@ class Player(pygame.sprite.Sprite):
             self.right = False
             self.moveLeft(dt)
             self.facing = False
-            if self.jumping:
-                self.render_p = self.animationArray_l[0]
-            else:
-                self.render_p = self.animationArray_l[(
-                    (((self.walkCount // 12) % 4) + 1))]
+            # if self.jumping:
+            #    self.render_p = self.animationArray_l[0]
+            # else:
+            self.render_p = self.animationArray_l[(
+                (((self.walkCount // 12) % 4) + 1))]
 
         if keys[pygame.K_RIGHT]:
             if self.right:
@@ -133,24 +133,24 @@ class Player(pygame.sprite.Sprite):
             self.left = False
             self.moveRight(dt)
             self.facing = False
-            if self.jumping:
-                self.render_p = self.animationArray_r[0]
-            else:
-                self.render_p = self.animationArray_r[(
-                    (((self.walkCount // 12) % 4) + 1))]
+            # if self.jumping:
+            #    self.render_p = self.animationArray_r[0]
+            # else:
+            self.render_p = self.animationArray_r[(
+                (((self.walkCount // 12) % 4) + 1))]
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
             self.stopMoving(dt)
             self.facing = True
             if self.left:
-                if self.jumping:
-                    self.render_p = self.animationArray_l[0]
-                else:
-                    self.render_p = self.animationArray_l[5]
+                # if self.jumping:
+                #    self.render_p = self.animationArray_l[0]
+                # else:
+                self.render_p = self.animationArray_l[5]
             else:
-                if self.jumping:
-                    self.render_p = self.animationArray_r[0]
-                else:
-                    self.render_p = self.animationArray_r[5]
+                # if self.jumping:
+                #    self.render_p = self.animationArray_r[0]
+                # else:
+                self.render_p = self.animationArray_r[5]
 
         left_border = int(max(self.check_collision_left(surroundings),
                               Config.GAMEFIELD_LEFT_BORDER))
@@ -192,9 +192,10 @@ class Player(pygame.sprite.Sprite):
         # self.emitter.update(dt)
 
     def render(self, surface):
-        pygame.draw.rect(surface, self.color,
-                         pygame.Rect(self.pos.x, self.pos.y, self.size.x,
-                                     self.size.y))
+        #    pygame.draw.rect(surface, self.color,
+        #                     pygame.Rect(self.pos.x, self.pos.y, self.size.x,
+        #                                 self.size.y))
+
         surface.blit(self.render_p, pygame.Rect(self.pos.x, self.pos.y,
                                                 self.size.x, self.size.x))
         # self.emitter.render(surface)
@@ -213,8 +214,8 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and
-               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-               self.pos.y + Config.PLAYER_HEIGHT - 4):
+                self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                    self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = min(border, square.bounds.x)
         return border
 
@@ -222,8 +223,7 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and
-               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
                     self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
@@ -232,8 +232,8 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and
-               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-               self.pos.x + Config.PLAYER_WIDTH):
+                self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                    self.pos.x + Config.PLAYER_WIDTH):
                 border = min(border, square.bounds.y)
         return border
 
@@ -241,7 +241,7 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.y < self.pos.y and
-               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-               self.pos.x + Config.PLAYER_WIDTH):
+                self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                    self.pos.x + Config.PLAYER_WIDTH):
                 border = max(border, square.bounds.y + Config.BLOCK_HEIGHT)
         return border
