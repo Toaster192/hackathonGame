@@ -1,5 +1,7 @@
 import pygame
 from src import TetrisGame
+import src.StaticStore as StaticStore
+from src.Vector import Vector2
 
 
 class Game:

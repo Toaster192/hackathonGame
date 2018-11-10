@@ -60,6 +60,11 @@ class TetrisGame(Game):
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_r:
                 if self.player1.dead:
+                    self.player1.dead = False
+                    StaticStore.offset = Vector2(0, 0)
+                    StaticStore.screen_shake = 0
+                    StaticStore.smoothed_offset = Vector2(0, 0)
+                    StaticStore.displacement_offset = Vector2(0, 0)
                     self.restart = True
 
     # Called every frame, dt is time between frames
