@@ -9,7 +9,7 @@ class GameField:
         self.x = Config.SCREEN_WIDTH / 2 - self.width / 2
         self.y = 0
 
-    def draw(self, surface):
+    def render(self, surface):
         pygame.draw.rect(surface, pygame.Color('white'), pygame.Rect(
             self.x, self.y, self.width, self.height))
         pygame.draw.rect(surface, pygame.Color('black'), pygame.Rect(

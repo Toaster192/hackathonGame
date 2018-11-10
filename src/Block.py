@@ -20,9 +20,9 @@ class Block(GameObject):
     def createBlock(self, x, y):
         return Square(self.x + x, self.y + y, self.color, self.speed)
 
-    def draw(self, surface):
+    def render(self, surface):
         for square in self.objects:
-            square.draw(surface)
+            square.render(surface)
 
     def move(self, dt, blocks, *speed):
         for square in self.objects:

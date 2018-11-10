@@ -3,11 +3,8 @@ from src.GameField import GameField
 from src.Game import Game
 import src.Colors as Color
 import src.Config as Config
-from src.TilePainter import paint_tile
 from src.Player import Player
 from .Particles import ParticleFieldEmitter
-from src.Block import Block
-import src.BlockTypes as BlockTypes
 from src.BlockGenerator import BlockGenerator
 from .Vector import Vector2
 
@@ -64,7 +61,7 @@ class TetrisGame(Game):
     def render(self):
         self.surface.fill(Color.BLACK)
 
-        self.game_field.draw(self.surface)
+        self.game_field.render(self.surface)
 
         # paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
         # paint_tile(self.surface, 20, 148, 128, 128, Color.GREEN)
@@ -74,7 +71,7 @@ class TetrisGame(Game):
         # paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
 
         for block in self.blocks:
-            block.draw(self.surface)
+            block.render(self.surface)
 
         self.player1.render(self.surface)
 
