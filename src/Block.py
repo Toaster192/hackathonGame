@@ -36,11 +36,11 @@ class Block(GameObject):
 		for square in self.objects:
 			if !square.detects_collision():
 				square.update(dt)
-			elif square.detects_collision() && self.falling == "falling":
-				self.falling = "grounded"
+			elif square.detects_collision() && self.falling == True:
+				self.falling = False
 				self.speed = self.speed / 2
 				square.update(dt)
-			else square.detects_collision() && self.falling == "grounded":
+			else square.detects_collision() && self.falling == False:
 				square.update(dt)
 
 
