@@ -8,6 +8,7 @@ from src.GameField import GameField
 from src.Player import Player
 from src.StaticStore import StaticStore
 from src.Vector import Vector2
+from src.util import interpolate
 
 
 class TetrisGame(Game):
@@ -60,8 +61,9 @@ class TetrisGame(Game):
     def loop(self, dt):
         self.fps = 0 if dt == 0 else int(1 / dt)
 
-        StaticStore.offset = StaticStore.displacement_offset + Vector2.random(
+        StaticStore.offset = StaticStore.smoothed_offset + Vector2.random(
             StaticStore.screen_shake, StaticStore.screen_shake)
+        StaticStore.smoothed_offset = interpolate((StaticStore.displacement_offset, StaticStore.smoothed_offset), Config.GRAPHICS_HEIGHT_SMOOTHING)
         StaticStore.screen_shake *= dt/Config.GRAPHICS_SCREENSHAKE_DAMPENING
 
         keys = pygame.key.get_pressed()
@@ -72,8 +74,7 @@ class TetrisGame(Game):
                 self.blocks.remove(block)
             elif block.falling:
                 block.move(dt, self.blocks[:i] + self.blocks[i + 1:],
-                           (
-                                       Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING) - StaticStore.offset.y)
+                           (Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING) - StaticStore.offset.y)
 
         for particle in self.particle_hooks:
             particle.update(dt)
