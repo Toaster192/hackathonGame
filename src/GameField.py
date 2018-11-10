@@ -10,8 +10,10 @@ class GameField:
         self.y = 0
 
     def draw(self, surface):
-        pygame.draw.rect(surface, pygame.Color('white'), pygame.Rect(self.x, self.y, self.width, self.height))
-        pygame.draw.rect(surface, pygame.Color('black'), pygame.Rect(self.x + 1, self.y + 1, self.width - 2, self.height - 2))
+        pygame.draw.rect(surface, pygame.Color('white'), pygame.Rect(
+            self.x, self.y, self.width, self.height))
+        pygame.draw.rect(surface, pygame.Color('black'), pygame.Rect(
+            self.x + 1, self.y + 1, self.width - 2, self.height - 2))
 
     def getWidth(self):
         return self.width
