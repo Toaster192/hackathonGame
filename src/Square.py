@@ -9,7 +9,7 @@ import src.Colors as Colors
 
 class Square(GameObject):
     def __init__(self, x, y, color, speed, w=32, h=32):
-        super().__init__(self, x, y, w, h, speed)
+        super().__init__(x, y, w, h, speed)
         self.color = color
 
     def draw(self, surface):

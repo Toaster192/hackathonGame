@@ -24,11 +24,11 @@ class Block(GameObject):
 
     def move(self, dt, *speed):
         for square in self.objects:
-            if not square.detects_collision():
+            if not square.detects_collision("horizontal","left"):
                 square.update(dt)
-            elif square.detects_collision() and self.falling == True:
+            elif square.detects_collision("horizontal","left") and self.falling == True:
                 self.falling = False
                 self.speed = self.speed / 2
                 square.update(dt)
-            elif square.detects_collision() and self.falling == False:
+            elif square.detects_collision("horizontal","left") and self.falling == False:
                 square.update(dt)
