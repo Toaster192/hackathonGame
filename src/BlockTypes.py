@@ -101,5 +101,5 @@ T3 = ((1 * Config.BLOCK_WIDTH, 0),
       (2 * Config.BLOCK_WIDTH,
        1 * Config.BLOCK_WIDTH))
 
-array = (L, L1,   L2,    L3, J, J1, J2, J3, SQR, S, S1,
-         Z, Z1, LINE, LINE2, T, T1, T2, T3)
+array = (L, L1, L2, L3,    J,   J1,    J2,    J3, SQR, SQR,  S,  S, S1, S1,
+         Z,  Z, Z1, Z1, LINE, LINE, LINE2, LINE2,   T,  T1, T2, T3)
