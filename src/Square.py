@@ -9,7 +9,7 @@ class Square(GameObject):
         super().__init__(x, y, w, h)
         #GameObject.__init__(self, x, y, w, h)
         self.color = color
- 
+
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, self.bounds)
 
