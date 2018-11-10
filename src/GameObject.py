@@ -53,3 +53,6 @@ class GameObject:
             return
 
         self.move(dt, *self.speed)
+
+    def __del__(self):
+        pass
