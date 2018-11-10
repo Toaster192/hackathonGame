@@ -3,3 +3,4 @@ env/
 .DS_Store/
 .vscode/
 src/__pycache__/
+src/Particles/__pycache__/
