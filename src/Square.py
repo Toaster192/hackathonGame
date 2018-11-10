@@ -17,16 +17,6 @@ class Square(GameObject):
                    self.bounds.height, Colors.CYAN)
 
     def detects_collision(self, mode, direction=""):
-        if(mode == "vertical"):
-            #top_squares = grounded_squares.get_top_squares
-            #return top_squares[i].y <= self.bottom + 1 || self.bottom == 1
-            return False
-        elif(mode == "horizontal"):
-            grounded_squares = [[(i*Config.BLOCK_WIDTH,j*Config.BLOCK_WIDTH) for i in range(16)] for j in range(16)]
-            #if(dir == "left"):
-            #    x = self.left//Config.BLOCK_WIDTH
-            #elif(dir == "right"):
-            #    x = self.left//Config.BLOCK_WIDTH + Config.BLOCK_WIDTH
-            #return grounded_squares[x][self.top//Config.BLOCK_HEIGHT] || grounded_squares[x][self.top//Config.BLOCK_HEIGHT]
-            return False
+        if self.bounds.y + self.bounds.height >= Config.GAMEFIELD_BOTTOM_BORDER - 1:
+            return True
         return False

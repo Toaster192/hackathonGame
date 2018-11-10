@@ -29,9 +29,12 @@ class Block(GameObject):
                 square.update(dt)
             elif square.detects_collision("horizontal","left") and self.falling == True:
                 self.falling = False
-                self.speed = self.speed / 2
+                for square in self.objects:
+                    square.speed = (0, 0)
+                self.speed = (0, 0)
                 square.update(dt)
-                event = pygame.event.Event(pygame.USEREVENT)
+                print(speed)
+                event = pygame.event.Event(pygame.USEREVENT, {"ev": "block_falled"})
                 pygame.event.post(event)
             elif square.detects_collision("horizontal","left") and self.falling == False:
                 square.update(dt)
