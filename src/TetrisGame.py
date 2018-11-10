@@ -1,12 +1,11 @@
 import pygame
-from src.GameField import GameField
-from src.Game import Game
+
 import src.Colors as Color
 import src.Config as Config
-from src.Player import Player
-from .Particles import ParticleFieldEmitter
 from src.BlockGenerator import BlockGenerator
-from .Vector import Vector2
+from src.Game import Game
+from src.GameField import GameField
+from src.Player import Player
 
 
 class TetrisGame(Game):
@@ -21,14 +20,7 @@ class TetrisGame(Game):
                               Config.PLAYER_HEIGHT, Color.RED)
         self.blocks = [self.generator.generate(self.block_speed)]
 
-        self.emitter = ParticleFieldEmitter(
-            colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] + [
-                Color.GRAY] * 2 + [Color.DARK_GRAY,
-                                   Color.darker(Color.DARK_GRAY, 2),
-                                   Color.BLACK]), pos=Vector2(256, 256),
-            size=Vector2(32, 8), velocity=Vector2(16, -8),
-            velocity_jitter=Vector2(4, 4), accel=Vector2(0, -4), gen_delay=0.01,
-            duration=4, sizes=[3, 5, 8, 6, 8, 16])
+
 
     # Gets called at the start of the game
     def init(self, window_name, size):

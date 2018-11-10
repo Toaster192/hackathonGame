@@ -1,5 +1,8 @@
 import pygame
+
+import src.Colors as Color
 import src.Config as Config
+from .Particles import ParticleFieldEmitter
 from .Vector import Vector2
 
 
@@ -17,17 +20,27 @@ class Player:
         self.v = Vector2(0, 0)
         self.speed = Config.PLAYER_MAX_SPEED
 
-    def moveLeft(self):
+        self.emitter = ParticleFieldEmitter(
+            colors=(
+                [Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED, Color.GRAY,
+                 Color.GRAY, Color.DARK_GRAY, Color.darker(Color.DARK_GRAY, 2),
+                 Color.BLACK]), pos=Vector2(0, 0),
+            size=Vector2(Config.PLAYER_WIDTH, Config.PLAYER_HEIGHT),
+            velocity=Vector2(0, -16), velocity_jitter=Vector2(4, 8),
+            accel=Vector2(0, -12), gen_delay=0.01, duration=2,
+            sizes=[3, 5, 8, 6, 8, 16])
+
+    def moveLeft(self, dt):
         if self.v.x > 0:
-            self.stopMoving()
-        self.v -= Vector2(Config.PLAYER_ACCELERATION, 0)
+            self.stopMoving(dt)
+        self.v -= Vector2(Config.PLAYER_ACCELERATION * dt, 0)
         if self.v.x < -self.speed:
             self.v.x = -self.speed
 
-    def moveRight(self):
+    def moveRight(self, dt):
         if self.v.x < 0:
-            self.stopMoving()
-        self.v += Vector2(Config.PLAYER_ACCELERATION, 0)
+            self.stopMoving(dt)
+        self.v += Vector2(Config.PLAYER_ACCELERATION * dt, 0)
         if self.v.x > self.speed:
             self.v.x = self.speed
 
@@ -36,22 +49,22 @@ class Player:
             self.jumping = True
             self.v.y = -self.jumpspeed
 
-    def stopMoving(self):
-        self.v.x *= 0.6
+    def stopMoving(self, dt):
+        self.v.x *= 1 if dt == 0 else 0.01 / dt
 
     def update(self, dt, keys, blocks):
         surroundings = self.calculate_surroundings(blocks)
 
         if keys[pygame.K_LEFT]:
-            self.moveLeft()
+            self.moveLeft(dt)
             self.facing = False
 
         if keys[pygame.K_RIGHT]:
-            self.moveRight()
+            self.moveRight(dt)
             self.facing = False
 
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
-            self.stopMoving()
+            self.stopMoving(dt)
             self.facing = True
 
         left_border = int(max(self.check_collision_left(surroundings),
@@ -62,16 +75,16 @@ class Player:
             self.pos.x = left_border
         else:
             right_border = int(min(self.check_collision_right(surroundings),
-                                   Config.GAMEFIELD_RIGHT_BORDER))
+                                   Config.GAMEFIELD_RIGHT_BORDER - 1))
             if (int(self.pos.x) > (
                     right_border - Config.PLAYER_WIDTH) - self.v.x * dt):
                 self.v.x = 0
-                self.pos.x = (right_border - Config.PLAYER_WIDTH - 1)
+                self.pos.x = (right_border - Config.PLAYER_WIDTH)
 
         if keys[pygame.K_UP]:
             self.jump()
 
-        self.v += Vector2(0, Config.PLAYER_GRAVITY)
+        self.v += Vector2(0, Config.PLAYER_GRAVITY * dt)
         self.pos += self.v * dt
 
         bottom_border = int(min(self.check_collision_down(surroundings),
@@ -87,37 +100,42 @@ class Player:
                 self.v.y = 0
                 self.pos.y = top_border
 
+        # self.emitter.pos = self.pos
+        # self.emitter.update(dt)
+
     def render(self, surface):
         pygame.draw.rect(surface, self.color,
                          pygame.Rect(self.pos.x, self.pos.y, self.size.x,
                                      self.size.y))
+        # self.emitter.render(surface)
 
     def calculate_surroundings(self, blocks):
         around = []
         for block in blocks:
             if self.pos.manhattan_distance(
-                    Vector2(block.x, block.y)) < Config.COLLISION_DISTANCE * Config.BLOCK_WIDTH:
+                    Vector2(block.x,
+                            block.y)) < Config.COLLISION_DISTANCE * Config.BLOCK_WIDTH:
                 around += block.objects
         return around
 
     def check_collision_right(self, surroundings):
         border = 1e6
         for square in surroundings:
-            if square.bounds.x > self.pos.x + Config.PLAYER_WIDTH/2 and self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y < self.pos.y + Config.PLAYER_HEIGHT - 4:
+            if square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y < self.pos.y + Config.PLAYER_HEIGHT - 4:
                 border = min(border, square.bounds.x)
         return border
 
     def check_collision_left(self, surroundings):
         border = -1e6
         for square in surroundings:
-            if square.bounds.x + Config.BLOCK_WIDTH/2 < self.pos.x and self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y < self.pos.y + Config.PLAYER_HEIGHT - 4:
+            if square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y < self.pos.y + Config.PLAYER_HEIGHT - 4:
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
 
     def check_collision_down(self, surroundings):
         border = 1e6
         for square in surroundings:
-            if square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT/2 and self.pos.x - Config.BLOCK_WIDTH < square.bounds.x < self.pos.x + Config.PLAYER_WIDTH:
+            if square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and self.pos.x - Config.BLOCK_WIDTH < square.bounds.x < self.pos.x + Config.PLAYER_WIDTH:
                 border = min(border, square.bounds.y)
         return border
 
