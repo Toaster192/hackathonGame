@@ -6,20 +6,19 @@ import src.Config as Config
 from src.TilePainter import paint_tile
 from src.Player import Player
 from .Particles import ParticleFieldEmitter
+from src.Block import Block
+import src.BlockTypes as BlockTypes
 
 
 class PlaceholderGame(Game):
-
     def __init__(self):
         self.game_field = GameField()
         super().__init__()
         self.fps_font = None
         self.fps = 0
-        self.player1 = Player((Config.SCREEN_WIDTH) // 2,
-                              Config.GAMEFIELD_BOTTOM_BORDER -
-                              Config.PLAYER_HEIGHT,
-                              Config.PLAYER_WIDTH,
+        self.player1 = Player(50, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
+        self.block = Block(5,100,256,256,BlockTypes.array[2],(0, 1),0,Color.BLACK)
 
         self.emitter = ParticleFieldEmitter(color_begin=Color.GRAY,
                                             color_end=Color.BLACK,
@@ -83,6 +82,8 @@ class PlaceholderGame(Game):
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
 
+        self.block.move(dt)
+
         self.emitter.update(dt)
 
     # Called after loop(), renders the game screen
@@ -102,6 +103,7 @@ class PlaceholderGame(Game):
 
         paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
 
+        self.block.draw(self.surface)
         pygame.draw.rect(self.surface, self.player1.color,
                          pygame.Rect(self.player1.x, self.player1.y,
                                      self.player1.width, self.player1.height))

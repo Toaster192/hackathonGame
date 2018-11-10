@@ -1,10 +1,28 @@
 from pygame.rect import Rect
 
+class Bounds:
+    def __init__(self, x, y, w, h):
+        self.x = float(x)
+        self.y = float(y)
+        self.h = float(h)
+        self.w = float(w)
+        self.left = float(x)
+        self.right = float(x + w)
+        self.top = float(y)
+        self.bottom = float(y + h)
+        self.width = self.w
+        self.height = self.h
+        self.centerx = self.x + self.width / 2
+        self.centery = self.y + self.height / 2
+        self.center = (self.centerx, self.centery)
+
 
 class GameObject:
     def __init__(self, x, y, w, h, speed=(0, 0)):
-        self.bounds = Rect(x, y, w, h)
+        self.bounds = Bounds(x, y, w, h)
         self.speed = speed
+        print(self.bounds.x)
+        #self.bounds = Rect(float(x),float(y),float(w),float(h))
 
     @property
     def left(self):
@@ -46,7 +64,8 @@ class GameObject:
         pass
 
     def move(self, dt, dx, dy):
-        self.bounds = self.bounds.move(dx*dt, dy*dt)
+        self.bounds.x = self.bounds.x + dx * dt
+        self.bounds.y = self.bounds.y + dy * dt
 
     def update(self, dt):
         if self.speed == [0, 0]:
