@@ -66,9 +66,9 @@ class Player:
             self.image.convert()
             self.image = pygame.transform.scale(self.image,
                                                 (Config.PLAYER_WIDTH,
-                                                Config.PLAYER_WIDTH))
+                                                 Config.PLAYER_WIDTH))
             Timer(self.double_jump_cooldown, self.allow_double_jump).start()
-            #self.allow_double_jump()
+            # self.allow_double_jump()
         else:
             if self.can_double_jump:
                 self.can_double_jump = False
@@ -123,7 +123,7 @@ class Player:
             self.image.convert()
             self.image = pygame.transform.scale(self.image,
                                                 (Config.PLAYER_WIDTH,
-                                                Config.PLAYER_WIDTH))
+                                                 Config.PLAYER_WIDTH))
         else:
             top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:

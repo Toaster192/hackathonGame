@@ -46,7 +46,10 @@ class TetrisGame(Game):
         keys = pygame.key.get_pressed()
         self.player1.update(dt, keys, self.blocks)
 
-        self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
+        for i, block in enumerate(self.blocks):
+            if block.falling:
+                block.move(dt, self.blocks[:i] + self.blocks[i+1:],
+                           Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING)
 
     # Called after loop(), renders the game screen
     def render(self):
@@ -73,7 +76,9 @@ class TetrisGame(Game):
         self.surface.blit(fps_surface, (0, 0))
 
         can_double_jump_surface = \
-            self.fps_font.render('Can double jump?: ' + str(self.player1.can_double_jump), True, Color.GRAY)
+            self.fps_font.render('Can double jump?: ' +
+                                 str(self.player1.can_double_jump),
+                                 True, Color.GRAY)
         self.surface.blit(can_double_jump_surface, (0, 50))
 
         pygame.display.update()
