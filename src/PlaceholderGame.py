@@ -8,6 +8,7 @@ from src.Player import Player
 from .Particles import ParticleFieldEmitter
 from src.Block import Block
 import src.BlockTypes as BlockTypes
+from src.BlockGenerator import BlockGenerator
 
 
 class PlaceholderGame(Game):
@@ -18,8 +19,7 @@ class PlaceholderGame(Game):
         self.fps = 0
         self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
-        self.block = Block(
-            5, 100, 256, 256, BlockTypes.array[2], (0, 1), 0, Color.BLACK)
+        self.block = BlockGenerator.generate((0,50))
 
         self.emitter = ParticleFieldEmitter(
             colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] +
@@ -78,6 +78,8 @@ class PlaceholderGame(Game):
             self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
                               Config.PLAYER_WIDTH)
 
+        if pygame.event.poll().type == pygame.USEREVENT:
+            self.block = BlockGenerator.generate((0,50))
         if not(self.player1.jumping):
             if keys[pygame.K_UP]:
                 self.player1.jumping = True
