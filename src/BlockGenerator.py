@@ -2,28 +2,33 @@ import src.BlockTypes as BlockTypes
 from src.Block import Block
 import random
 import src.Colors as Colors
+import src.Config as Config
 
 
 class BlockGenerator():
-	def __init__(self):
-		pass
+    def __init__(self):
+        pass
 
-	def generate(self, speed):
-		generated_type = random.choice(BlockTypes.array)
+    def generate(self, speed):
+        generated_type = random.choice(BlockTypes.array)
 
-		# Rotate - TODO
-		width = max(map((lambda t: t[0]), generated_type)) + 32
-		height = max(map((lambda t: t[1], generated_type)) + 32
+        # Rotate - TODO
+        width = max(map((lambda t: t[0]),
+                        generated_type)) + Config.BLOCK_WIDTH
+        height = max(map((lambda t: t[1]),
+                         generated_type)) + Config.BLOCK_WIDTH
 
-		y=0 - height
+        y = - height
 
-		# AI
+        # AI
 
-		x=random.randint(0, (sirka_okna-width)//32) * 32
+        x = random.randint(0,
+                           (Config.SCREEN_WIDTH - width)
+                           // Config.BLOCK_WIDTH) * Config.BLOCK_WIDTH
 
-		color=random.choice(Colors.colors)
+        color = random.choice(Colors.colors)
 
-		block=Block(x, y, width, height, generated_type,
-			          speed, "active", color)
+        block = Block(x, y, width, height, generated_type,
+                      speed, "active", color)
 
-		return block
+        return block
