@@ -1,3 +1,6 @@
+import pygame
+
+
 def clamp(x, mn, mx):
     return min(max(x, mn), mx)
 
@@ -17,3 +20,10 @@ def interpolate(array, x):
 
 def interpolate_tuple(array, x):
     return tuple(map(lambda t: interpolate(t, x), zip(*array)))
+
+
+def load_image(path, size):
+    image = pygame.image.load(path)
+    image.convert()
+    image = pygame.transform.scale(image, size)
+    return image

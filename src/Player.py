@@ -1,11 +1,12 @@
+from threading import Timer
+
 import pygame
 
 import src.Colors as Color
 import src.Config as Config
+import src.util as util
 from .Particles import ParticleFieldEmitter
 from .Vector import Vector2
-
-from threading import Timer
 
 
 class Player:
@@ -26,11 +27,13 @@ class Player:
         self.dead = False
 
         pygame.display.init()
-        self.image = pygame.image.load('img/face_calm.png')
-        self.image.convert()
-        self.image = pygame.transform.scale(self.image,
-                                            (Config.PLAYER_WIDTH,
-                                             Config.PLAYER_WIDTH))
+        self.calm_image = util.load_image('img/face_calm.png',
+                                          (Config.PLAYER_WIDTH,
+                                           Config.PLAYER_WIDTH))
+        self.excited_image = util.load_image('img/face_excited.png',
+                                             (Config.PLAYER_WIDTH,
+                                              Config.PLAYER_WIDTH))
+        self.image = self.calm_image
 
         self.emitter = ParticleFieldEmitter(
             colors=(
@@ -63,11 +66,7 @@ class Player:
         if not self.jumping:
             self.jumping = True
             self.v.y = -self.jumpspeed
-            self.image = pygame.image.load('img/face_excited.png')
-            self.image.convert()
-            self.image = pygame.transform.scale(self.image,
-                                                (Config.PLAYER_WIDTH,
-                                                 Config.PLAYER_WIDTH))
+            self.image = self.excited_image
             Timer(self.double_jump_cooldown, self.allow_double_jump).start()
             # self.allow_double_jump()
         else:
@@ -120,11 +119,7 @@ class Player:
             self.v.y = 0
             self.pos.y = (bottom_border - Config.PLAYER_HEIGHT)
             self.jumping = False
-            self.image = pygame.image.load('img/face_calm.png')
-            self.image.convert()
-            self.image = pygame.transform.scale(self.image,
-                                                (Config.PLAYER_WIDTH,
-                                                 Config.PLAYER_WIDTH))
+            self.image = self.calm_image
         else:
             top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:
@@ -160,8 +155,8 @@ class Player:
         border = 1e6
         for square in surroundings:
             if (square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and
-               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-               self.pos.y + Config.PLAYER_HEIGHT - 4):
+                    self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                    self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = min(border, square.bounds.x)
         return border
 
@@ -169,8 +164,8 @@ class Player:
         border = -1e6
         for square in surroundings:
             if (square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and
-               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
-               self.pos.y + Config.PLAYER_HEIGHT - 4):
+                    self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                    self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
 
@@ -178,8 +173,8 @@ class Player:
         border = 1e6
         for square in surroundings:
             if (square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and
-               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-               self.pos.x + Config.PLAYER_WIDTH):
+                    self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                    self.pos.x + Config.PLAYER_WIDTH):
                 border = min(border, square.bounds.y)
         return border
 
@@ -187,7 +182,7 @@ class Player:
         border = -1e6
         for square in surroundings:
             if (square.bounds.y < self.pos.y and
-               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
-               self.pos.x + Config.PLAYER_WIDTH):
+                    self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                    self.pos.x + Config.PLAYER_WIDTH):
                 border = max(border, square.bounds.y + Config.BLOCK_HEIGHT)
         return border
