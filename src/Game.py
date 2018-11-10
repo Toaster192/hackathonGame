@@ -1,4 +1,5 @@
 import pygame
+from src import TetrisGame
 
 
 class Game:
@@ -7,6 +8,7 @@ class Game:
         self.surface = None
         self.running = False
         self.size = (0, 0)
+        self.restart = False
 
     def init(self, window_name, size):
         self.size = size
@@ -43,6 +45,9 @@ class Game:
     def run(self):
         self.running = True
         while self.running:
+            if(self.restart):
+                #self = TetrisGame()
+                return "restart"
             for event in pygame.event.get():
                 self._handle_event(event)
             self.loop(self.clock.get_time()/1000)

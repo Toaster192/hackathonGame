@@ -56,6 +56,10 @@ class TetrisGame(Game):
             self.blocks.append(self.generator.generate(self.block_speed))
         elif event.type == Config.PLAYER_DEAD_EVENT:
             self.player1.dead = True
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_r:
+                if self.player1.dead:
+                    self.restart = True
 
     # Called every frame, dt is time between frames
     def loop(self, dt):

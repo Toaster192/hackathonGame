@@ -5,7 +5,9 @@ import src.Config as Config
 def main():
     game = TetrisGame()
     game.init('Cool game', (Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
-    game.run()
+    while game.run() == "restart":
+        game = TetrisGame()
+        game.init('Restarted game', (Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
 
 
 if __name__ == '__main__':
