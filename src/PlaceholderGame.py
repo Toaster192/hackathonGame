@@ -37,9 +37,19 @@ class PlaceholderGame(Game):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            self.player1.moveLeft()
+            print(self.player1.x, Config.GAMEFIELD_LEFT_BORDER)
+            if int(self.player1.x) <= int(Config.GAMEFIELD_LEFT_BORDER) + 1:
+                self.player1.v_x = 0
+                self.player1.x = Config.GAMEFIELD_LEFT_BORDER
+            else:
+                self.player1.moveLeft()
         if keys[pygame.K_RIGHT]:
-            self.player1.moveRight()
+            print(Config.PLAYER_WIDTH)
+            if int(self.player1.x) >= ((int(Config.GAMEFIELD_RIGHT_BORDER) - 1) - Config.PLAYER_WIDTH):
+                self.player1.v_x = 0
+                self.player1.x = Config.GAMEFIELD_RIGHT_BORDER - Config.PLAYER_WIDTH
+            else:
+                self.player1.moveRight()
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
             self.player1.stopMoving()
         if keys[pygame.K_UP]:
