@@ -12,7 +12,7 @@ from src.BlockGenerator import BlockGenerator
 from .Vector import Vector2
 
 
-class PlaceholderGame(Game):
+class TetrisGame(Game):
     def __init__(self):
         self.game_field = GameField()
         super().__init__()
