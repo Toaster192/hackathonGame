@@ -20,7 +20,6 @@ class TetrisGame(Game):
         self.generator = BlockGenerator()
         self.player1 = None
         self.blocks = []
-        self.dead = False
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -48,7 +47,7 @@ class TetrisGame(Game):
         if event.type == Config.BLOCK_FELL_EVENT:
             self.blocks.append(self.generator.generate(self.block_speed))
         elif event.type == Config.PLAYER_DEAD_EVENT:
-            self.dead = True
+            self.player1.dead = True
 
     # Called every frame, dt is time between frames
     def loop(self, dt):
@@ -83,7 +82,7 @@ class TetrisGame(Game):
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
         self.surface.blit(fps_surface, (0, 0))
 
-        if self.dead:
+        if self.player1.dead:
             self.surface.blit(self.wasted_surface, (0, 50))
 
         pygame.display.update()

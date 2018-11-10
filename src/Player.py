@@ -1,11 +1,12 @@
+from threading import Timer
+
 import pygame
 
 import src.Colors as Color
 import src.Config as Config
+import src.util as util
 from .Particles import ParticleFieldEmitter
 from .Vector import Vector2
-
-from threading import Timer
 
 
 class Player(pygame.sprite.Sprite):
@@ -27,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.animationArray_l = []
         self.v = Vector2(0, 0)
         self.speed = Config.PLAYER_MAX_SPEED
+        self.dead = False
 
         sprite_sheet_l = pygame.image.load(sprite_l).convert_alpha()
         sprite_sheet_r = pygame.image.load(sprite_r).convert_alpha()
@@ -63,11 +65,6 @@ class Player(pygame.sprite.Sprite):
         self.animationArray_l.append(fl7)
         self.render_p = self.animationArray_r[5]
         pygame.display.init()
-        # self.image = pygame.image.load(self.animationArray_r[5])
-        #  self.image.convert()
-        # self.image = pygame.transform.scale(self.image,
-                                           # (Config.PLAYER_WIDTH,
-                                           #  Config.PLAYER_WIDTH))
 
         self.emitter = ParticleFieldEmitter(
             colors=(
@@ -100,11 +97,7 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping:
             self.jumping = True
             self.v.y = -self.jumpspeed
-            self.image = pygame.image.load('img/face_excited.png')
-            self.image.convert()
-            self.image = pygame.transform.scale(self.image,
-                                                (Config.PLAYER_WIDTH,
-                                                 Config.PLAYER_WIDTH))
+            self.image = self.excited_image
             Timer(self.double_jump_cooldown, self.allow_double_jump).start()
             # self.allow_double_jump()
         else:
@@ -161,20 +154,19 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.render_p = self.animationArray_r[5]
 
-
-        left_border=int(max(self.check_collision_left(surroundings),
+        left_border = int(max(self.check_collision_left(surroundings),
                               Config.GAMEFIELD_LEFT_BORDER))
 
         if int(self.pos.x) < left_border - self.v.x * dt:
-            self.v.x=0
-            self.pos.x=left_border
+            self.v.x = 0
+            self.pos.x = left_border
         else:
-            right_border=int(min(self.check_collision_right(surroundings),
+            right_border = int(min(self.check_collision_right(surroundings),
                                    Config.GAMEFIELD_RIGHT_BORDER - 1))
             if (int(self.pos.x) > (
                     right_border - Config.PLAYER_WIDTH) - self.v.x * dt):
-                self.v.x=0
-                self.pos.x=(right_border - Config.PLAYER_WIDTH)
+                self.v.x = 0
+                self.pos.x = (right_border - Config.PLAYER_WIDTH)
 
         if keys[pygame.K_UP]:
             self.jump()
@@ -182,25 +174,21 @@ class Player(pygame.sprite.Sprite):
         self.v += Vector2(0, Config.PLAYER_GRAVITY * dt)
         self.pos += self.v * dt
 
-        bottom_border=int(min(self.check_collision_down(surroundings),
+        bottom_border = int(min(self.check_collision_down(surroundings),
                                 Config.GAMEFIELD_BOTTOM_BORDER))
 
         if int(self.pos.y) > bottom_border - Config.PLAYER_HEIGHT:
-            self.v.y=0
-            self.pos.y=(bottom_border - Config.PLAYER_HEIGHT)
-            self.jumping=False
-            self.image=pygame.image.load('img/face_calm.png')
-            self.image.convert()
-            self.image=pygame.transform.scale(self.image,
-                                                (Config.PLAYER_WIDTH,
-                                                 Config.PLAYER_WIDTH))
+            self.v.y = 0
+            self.pos.y = (bottom_border - Config.PLAYER_HEIGHT)
+            self.jumping = False
         else:
-            top_border=int(self.check_collision_up(surroundings))
+            top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:
-                self.v.y=Config.BLOCK_SPEED[1] * 1.5
-                self.pos.y=top_border + 3
-                event=pygame.event.Event(Config.PLAYER_DEAD_EVENT)
-                pygame.event.post(event)
+                self.v.y = Config.BLOCK_SPEED[1]
+                self.pos.y = top_border + 3
+                if self.check_collision_down(surroundings) <= 1:
+                    event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
+                    pygame.event.post(event)
 
         # self.emitter.pos = self.pos
         # self.emitter.update(dt)
@@ -209,8 +197,8 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(surface, self.color,
                          pygame.Rect(self.pos.x, self.pos.y, self.size.x,
                                      self.size.y))
-        surface.blit(self.render_p,pygame.Rect(self.pos.x, self.pos.y,
-                                 self.size.x, self.size.x))
+        surface.blit(self.render_p, pygame.Rect(self.pos.x, self.pos.y,
+                                                self.size.x, self.size.x))
         # self.emitter.render(surface)
 
     def calculate_surroundings(self, blocks):
@@ -227,7 +215,10 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and
+                << << << < HEAD
                 self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                == == ===self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
                     self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = min(border, square.bounds.x)
         return border
@@ -236,7 +227,10 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and
+                << << << < HEAD
                 self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                == == ===self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
                     self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
@@ -245,7 +239,10 @@ class Player(pygame.sprite.Sprite):
         border = 1e6
         for square in surroundings:
             if (square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and
+                << << << < HEAD
                 self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                == == ===self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
                     self.pos.x + Config.PLAYER_WIDTH):
                 border = min(border, square.bounds.y)
         return border
@@ -254,7 +251,10 @@ class Player(pygame.sprite.Sprite):
         border = -1e6
         for square in surroundings:
             if (square.bounds.y < self.pos.y and
+                << << << < HEAD
                 self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                == == ===self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+                >>>>>> > e6586a76ba0610de603767ac81e7cb1f533d1e8c
                     self.pos.x + Config.PLAYER_WIDTH):
                 border = max(border, square.bounds.y + Config.BLOCK_HEIGHT)
         return border
