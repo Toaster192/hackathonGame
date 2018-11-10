@@ -22,7 +22,10 @@ class TetrisGame(Game):
     # Gets called at the start of the game
     def init(self, window_name, size):
         super().init(window_name, size)
-        self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
+        self.player1 = Player(Config.GAMEFIELD_LEFT_BORDER +
+                              (Config.GAMEFIELD_WIDTH // 2),
+                              Config.GAMEFIELD_BOTTOM_BORDER -
+                              Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
 
