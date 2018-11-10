@@ -104,6 +104,9 @@ class Player(pygame.sprite.Sprite):
                 self.can_double_jump = False
                 self.v.y = -self.jumpspeed
 
+    def hold_on(self):
+        pass
+
     def stopMoving(self, dt):
         self.v.x *= 1 if dt == 0 else 0.01 / dt
 
@@ -192,8 +195,23 @@ class Player(pygame.sprite.Sprite):
         else:
             top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:
-                self.v.y = Config.BLOCK_SPEED[1]
-                self.pos.y = top_border + 3
+                self.v.y = Config.BLOCK_SPEED[1] + Config.PLAYER_GRAVITY * dt
+                #self.pos.y = top_border
+                if keys[pygame.K_UP]:
+                    self.pos.y = top_border
+                    right_border = int(min(self.check_collision_right(surroundings),
+                                   Config.GAMEFIELD_RIGHT_BORDER - 1))
+                    left_border = int(max(self.check_collision_left(surroundings),
+                              Config.GAMEFIELD_LEFT_BORDER))
+                    if self.pos.x > (right_border - Config.PLAYER_WIDTH):
+                        self.can_double_jump = True
+                        self.pos.x = right_border - Config.PLAYER_WIDTH
+                    elif self.pos.x < left_border:
+                        self.can_double_jump = True
+                        self.pos.x = left_border
+                    else:
+                        self.hold_on()
+                        
                 if self.check_collision_down(surroundings) <= 1:
                     event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
                     pygame.event.post(event)
