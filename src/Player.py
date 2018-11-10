@@ -194,7 +194,7 @@ class Player(pygame.sprite.Sprite):
             self.jumping = False
         else:
             top_border = int(self.check_collision_up(surroundings))
-            if int(self.pos.y) < top_border + self.v.y * dt + 2:
+            if int(self.pos.y) < top_border + self.v.y * dt - 1:
                 event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
                 pygame.event.post(event)
                 self.v.y = Config.BLOCK_SPEED[1] + Config.PLAYER_GRAVITY * dt
