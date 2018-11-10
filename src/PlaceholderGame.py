@@ -25,11 +25,11 @@ class PlaceholderGame(Game):
         self.blocks = [self.generator.generate(self.block_speed)]
 
         self.emitter = ParticleFieldEmitter(
-            colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] +
-                    [Color.GRAY] * 2 + [Color.DARK_GRAY,
-                                        Color.darker(Color.DARK_GRAY, 2),
-                                        Color.BLACK]),
-            pos=Vector2(256, 256), size=Vector2(32, 8), velocity=Vector2(16, -8),
+            colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] + [
+                Color.GRAY] * 2 + [Color.DARK_GRAY,
+                                   Color.darker(Color.DARK_GRAY, 2),
+                                   Color.BLACK]), pos=Vector2(256, 256),
+            size=Vector2(32, 8), velocity=Vector2(16, -8),
             velocity_jitter=Vector2(4, 4), accel=Vector2(0, -4), gen_delay=0.01,
             duration=4, sizes=[3, 5, 8, 6, 8, 16])
 
@@ -53,75 +53,17 @@ class PlaceholderGame(Game):
         self.fps = 0 if dt == 0 else int(1 / dt)
 
         keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_LEFT]:
-            # print(self.player1.x, Config.GAMEFIELD_LEFT_BORDER)
-            self.player1.moveLeft()
-            self.player1.left = True
-            self.player1.right = False
-            self.player1.facing = False
-        if keys[pygame.K_RIGHT]:
-            # print(self.player1.x, Config.GAMEFIELD_RIGHT_BORDER)
-            self.player1.moveRight()
-            self.player1.left = False
-            self.player1.right = True
-            self.player1.facing = False
-        if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
-            self.player1.stopMoving()
-            self.player1.left = False
-            self.player1.right = False
-            self.player1.facing = True
-
-        if (int(self.player1.x) <
-                int(Config.GAMEFIELD_LEFT_BORDER) - self.player1.v_x):
-            self.player1.v_x = 0
-            self.player1.x = Config.GAMEFIELD_LEFT_BORDER
-        elif (int(self.player1.x) >
-              ((int(Config.GAMEFIELD_RIGHT_BORDER)) -
-               Config.PLAYER_WIDTH) - self.player1.v_x):
-            self.player1.v_x = 0
-            self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
-                              Config.PLAYER_WIDTH)
-
-        if not(self.player1.jumping):
-            if keys[pygame.K_UP]:
-                self.player1.jumping = True
-                self.player1.right = False
-                self.player1.left = False
-                self.player1.walkCount = 0
-        else:
-            if self.player1.jumpspeed <= 10:
-                neg = -1
-                if self.player1.jumpspeed > 0:
-                    neg = 1
-                self.player1.v_y = (self.player1.jumpspeed ** 2) * 0.2 * neg
-                # print(self.player1.v_y)
-                self.player1.jumpspeed += 1
-
-        if (int(self.player1.y) >
-                int(
-                    Config.GAMEFIELD_BOTTOM_BORDER - Config.PLAYER_HEIGHT) - self.player1.v_y):
-            self.player1.v_y = 0
-            self.player1.y = (Config.GAMEFIELD_BOTTOM_BORDER -
-                              Config.PLAYER_HEIGHT)
-            self.player1.jumping = False
-            self.player1.jumpspeed = -10
-
-        self.player1.x += self.player1.v_x
-        self.player1.y += self.player1.v_y
+        self.player1.update(dt, keys)
 
         self.blocks[len(self.blocks) - 1].move(dt)
 
-        self.emitter.update(dt)
+        # self.emitter.update(dt)
 
     # Called after loop(), renders the game screen
 
     def render(self):
         self.surface.fill(Color.BLACK)
 
-        pygame.draw.rect(self.surface, self.player1.color, pygame.Rect(
-            self.player1.x, self.player1.y,
-            self.player1.width, self.player1.height))
         self.game_field.draw(self.surface)
 
         # paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
@@ -129,28 +71,17 @@ class PlaceholderGame(Game):
         # paint_tile(self.surface, 148, 20, 128, 128, Color.BLUE)
         # paint_tile(self.surface, 148, 148, 128, 128, Color.MAGENTA)
 
-        paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
+        # paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
 
         for block in self.blocks:
             block.draw(self.surface)
-        pygame.draw.rect(self.surface, self.player1.color,
-                         pygame.Rect(self.player1.x, self.player1.y,
-                                     self.player1.width, self.player1.height))
 
-        self.emitter.render(self.surface)
+        self.player1.render(self.surface)
+
+        # self.emitter.render(self.surface)
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
         self.surface.blit(fps_surface, (0, 0))
 
         pygame.display.update()
-
-    def run(self):
-        self.running = True
-        while self.running:
-            for event in pygame.event.get():
-                self._handle_event(event)
-            self.loop(self.clock.get_time() / 1000)
-            self.render()
-            self.clock.tick(60)
-        self._clean_up()
