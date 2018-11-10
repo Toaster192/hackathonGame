@@ -32,11 +32,11 @@ class TetrisGame(Game):
                               (Config.GAMEFIELD_WIDTH // 2),
                               Config.GAMEFIELD_BOTTOM_BORDER -
                               Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
-                              Config.PLAYER_HEIGHT, Color.RED)
+                              Config.PLAYER_HEIGHT, Color.BLACK, 'img/p1_left.png', 'img/p1_right.png')
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
         self.wasted_font = pygame.font.Font('FreeMono.ttf', 46)
         self.wasted_surface = \
-                self.wasted_font.render('YOU DEAD!', True, Color.RED)
+            self.wasted_font.render('YOU DEAD!', True, Color.RED)
 
     # Gets called at game end (pressed [X])
     def clean_up(self):
