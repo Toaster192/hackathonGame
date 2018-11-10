@@ -22,7 +22,6 @@ class Square(GameObject):
             return False
         elif(mode == "horizontal"):
             grounded_squares = [[(i*Config.BLOCK_WIDTH,j*Config.BLOCK_WIDTH) for i in range(16)] for j in range(16)]
-            print(grounded_squares)
             #if(dir == "left"):
             #    x = self.left//Config.BLOCK_WIDTH
             #elif(dir == "right"):
