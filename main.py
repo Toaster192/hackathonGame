@@ -1,9 +1,10 @@
 from src.PlaceholderGame import PlaceholderGame
+import src.Config as Config
 
 
 def main():
     game = PlaceholderGame()
-    game.init_screen('Cool game', (640, 480))
+    game.init_screen('Cool game', (Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT))
     game.run()
 
 
