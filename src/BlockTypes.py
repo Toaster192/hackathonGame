@@ -103,4 +103,3 @@ T3 = ((1*Config.BLOCK_WIDTH, 0),
 
 array = (L, L1,   L2,    L3, J, J1, J2, J3, SQR, S, S1,
          Z, Z1, LINE, LINE2, T, T1, T2, T3)
-# array = (L3, J3)

@@ -1,7 +1,8 @@
-from src.Square import Square
-from src.GameObject import GameObject
 import pygame
+
 import src.Config as Config
+from src.GameObject import GameObject
+from src.Square import Square
 
 
 class Block(GameObject):
