@@ -8,3 +8,26 @@ class Player:
         self.jumping = False
         self.left = False
         self.right = False
+        self.v_x = 0
+        self.v_y = 0
+        self.speed = 5
+
+    def moveLeft(self):
+        if self.v_x <= (-self.speed + 1):
+            self.v_x = -self.speed
+        else:
+            self.v_x -= 1
+
+    def moveRight(self):
+        if self.v_x >= (self.speed - 1):
+            self.v_x = self.speed
+        else:
+            self.v_x += 1
+
+    def jump(self):
+        if not self.jumping:
+            self.jumping = True
+            self.v_y = -10
+
+    def stopMoving(self):
+        self.v_x += -self.v_x/2

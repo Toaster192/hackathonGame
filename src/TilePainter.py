@@ -11,7 +11,7 @@ def paint_tile(surface, x, y, w, h, color, border=0.125):
         (x + w*border, y + h*border),
         (x + w*border, y + h*(1-border)),
         (x, y + h)
-                                                   ])
+    ])
     pygame.draw.polygon(surface, darker(color), [
         (x + w, y + h),
         (x, y + h),
@@ -19,4 +19,4 @@ def paint_tile(surface, x, y, w, h, color, border=0.125):
         (x + w*(1-border), y + h*(1-border)),
         (x + w*(1-border), y + h*border),
         (x + w, y)
-                                                   ])
+    ])
