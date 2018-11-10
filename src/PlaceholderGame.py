@@ -1,6 +1,7 @@
 import pygame
 from src.Game import Game
 import src.Colors as Color
+from src.TilePainter import paint_tile
 
 
 class PlaceholderGame(Game):
@@ -30,7 +31,12 @@ class PlaceholderGame(Game):
     def render(self):
         self.surface.fill(Color.BLACK)
 
-        pygame.draw.rect(self.surface, Color.RED, pygame.Rect(10, 20, 50, 50))
+        paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
+        paint_tile(self.surface, 20, 148, 128, 128, Color.GREEN)
+        paint_tile(self.surface, 148, 20, 128, 128, Color.BLUE)
+        paint_tile(self.surface, 148, 148, 128, 128, Color.MAGENTA)
+
+        paint_tile(self.surface, 60, 300, 16, 16, Color.ORANGE)
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
