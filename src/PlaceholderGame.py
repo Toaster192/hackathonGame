@@ -3,8 +3,9 @@ from src.GameField import GameField
 from src.Game import Game
 import src.Colors as Color
 import src.Config as Config
-# from src.TilePainter import paint_tile
+from src.TilePainter import paint_tile
 from src.Player import Player
+from .Particles import ParticleFieldEmitter
 
 
 class PlaceholderGame(Game):
@@ -19,6 +20,15 @@ class PlaceholderGame(Game):
                               Config.PLAYER_HEIGHT,
                               Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
+
+        self.emitter = ParticleFieldEmitter(color_begin=Color.GRAY,
+                                            color_end=Color.BLACK,
+                                            color_jitter=0.1, pos=(256, 256),
+                                            size=(32, 8), velocity=(16, -8),
+                                            velocity_jitter=(4, 4),
+                                            accel=(0, -4), gen_delay=0.01,
+                                            duration=4, size_begin=6,
+                                            size_end=0)
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -59,15 +69,21 @@ class PlaceholderGame(Game):
         if keys[pygame.K_UP]:
             self.player1.jump()
 
-        if int(self.player1.x) < int(Config.GAMEFIELD_LEFT_BORDER):
+        if (int(self.player1.x) <
+                int(Config.GAMEFIELD_LEFT_BORDER) - self.player1.v_x):
             self.player1.v_x = 0
             self.player1.x = Config.GAMEFIELD_LEFT_BORDER
-        elif int(self.player1.x) > ((int(Config.GAMEFIELD_RIGHT_BORDER)) - Config.PLAYER_WIDTH):
+        elif (int(self.player1.x) >
+                ((int(Config.GAMEFIELD_RIGHT_BORDER)) -
+                    Config.PLAYER_WIDTH) - self.player1.v_x):
             self.player1.v_x = 0
-            self.player1.x = Config.GAMEFIELD_RIGHT_BORDER - Config.PLAYER_WIDTH
+            self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
+                              Config.PLAYER_WIDTH)
 
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
+
+        self.emitter.update(dt)
 
     # Called after loop(), renders the game screen
 
@@ -75,8 +91,8 @@ class PlaceholderGame(Game):
         self.surface.fill(Color.BLACK)
 
         pygame.draw.rect(self.surface, self.player1.color, pygame.Rect(
-                         self.player1.x, self.player1.y,
-                         self.player1.width, self.player1.height))
+            self.player1.x, self.player1.y,
+            self.player1.width, self.player1.height))
         self.game_field.draw(self.surface)
 
         # paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
@@ -84,11 +100,13 @@ class PlaceholderGame(Game):
         # paint_tile(self.surface, 148, 20, 128, 128, Color.BLUE)
         # paint_tile(self.surface, 148, 148, 128, 128, Color.MAGENTA)
 
-        # paint_tile(self.surface, 60, 300, 16, 16, Color.ORANGE)
+        paint_tile(self.surface, 256, 256, 32, 32, Color.RED)
 
         pygame.draw.rect(self.surface, self.player1.color,
                          pygame.Rect(self.player1.x, self.player1.y,
                                      self.player1.width, self.player1.height))
+
+        self.emitter.render(self.surface)
 
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
@@ -101,7 +119,7 @@ class PlaceholderGame(Game):
         while self.running:
             for event in pygame.event.get():
                 self._handle_event(event)
-            self.loop(self.clock.get_time()/1000)
+            self.loop(self.clock.get_time() / 1000)
             self.render()
             self.clock.tick(60)
         self._clean_up()
