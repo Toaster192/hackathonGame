@@ -113,49 +113,51 @@ class Player(pygame.sprite.Sprite):
             pygame.event.post(event)
 
         surroundings = self.calculate_surroundings(blocks)
-
-        if keys[pygame.K_LEFT]:
-            if self.left:
-                self.walkCount += 1
-            if self.right:
-                self.walkCount = 0
-            self.left = True
-            self.right = False
-            self.moveLeft(dt)
-            self.facing = False
-            # if self.jumping:
-            #    self.render_p = self.animationArray_l[0]
-            # else:
-            self.render_p = self.animationArray_l[(
-                (((self.walkCount // 12) % 4) + 1))]
-
-        if keys[pygame.K_RIGHT]:
-            if self.right:
-                self.walkCount += 1
-            if self.left:
-                self.walkCount = 0
-            self.right = True
-            self.left = False
-            self.moveRight(dt)
-            self.facing = False
-            # if self.jumping:
-            #    self.render_p = self.animationArray_r[0]
-            # else:
-            self.render_p = self.animationArray_r[(
-                (((self.walkCount // 12) % 4) + 1))]
-        if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
-            self.stopMoving(dt)
-            self.facing = True
-            if self.left:
+        if not self.dead:
+            if keys[pygame.K_LEFT]:
+                if self.left:
+                    self.walkCount += 1
+                if self.right:
+                    self.walkCount = 0
+                self.left = True
+                self.right = False
+                self.moveLeft(dt)
+                self.facing = False
                 # if self.jumping:
                 #    self.render_p = self.animationArray_l[0]
                 # else:
-                self.render_p = self.animationArray_l[5]
-            else:
+                self.render_p = self.animationArray_l[(
+                    (((self.walkCount // 12) % 4) + 1))]
+
+            if keys[pygame.K_RIGHT]:
+                if self.right:
+                    self.walkCount += 1
+                if self.left:
+                    self.walkCount = 0
+                self.right = True
+                self.left = False
+                self.moveRight(dt)
+                self.facing = False
                 # if self.jumping:
                 #    self.render_p = self.animationArray_r[0]
                 # else:
-                self.render_p = self.animationArray_r[5]
+                self.render_p = self.animationArray_r[(
+                    (((self.walkCount // 12) % 4) + 1))]
+            if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
+                self.stopMoving(dt)
+                self.facing = True
+                if self.left:
+                    # if self.jumping:
+                    #    self.render_p = self.animationArray_l[0]
+                    # else:
+                    self.render_p = self.animationArray_l[5]
+                else:
+                    # if self.jumping:
+                    #    self.render_p = self.animationArray_r[0]
+                    # else:
+                    self.render_p = self.animationArray_r[5]
+        else:
+            self.render_p = self.animationArray_r[0]
 
         left_border = int(max(self.check_collision_left(surroundings),
                               Config.GAMEFIELD_LEFT_BORDER))
@@ -171,8 +173,11 @@ class Player(pygame.sprite.Sprite):
                 self.v.x = 0
                 self.pos.x = (right_border - Config.PLAYER_WIDTH)
 
-        if keys[pygame.K_UP]:
-            self.jump()
+        if not self.dead:
+            if keys[pygame.K_UP]:
+                self.jump()
+        else:
+            self.render_p = self.animationArray_r[0]
 
         self.v += Vector2(0, Config.PLAYER_GRAVITY * dt)
         self.pos += self.v * dt
