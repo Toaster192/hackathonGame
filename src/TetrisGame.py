@@ -93,7 +93,9 @@ class TetrisGame(Game):
         self.surface.blit(fps_surface, (0, 0))
 
         if self.player1.dead:
-            self.surface.blit(self.wasted_surface, (0, 50))
+            self.surface.blit(self.wasted_surface, (
+                Config.SCREEN_WIDTH//2 - self.wasted_surface.get_rect().width//2,
+                Config.SCREEN_HEIGHT//2 - self.wasted_surface.get_rect().height//2))
 
         pygame.display.update()
 
