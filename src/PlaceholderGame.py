@@ -5,6 +5,8 @@ import src.Colors as Color
 import src.Config as Config
 # from src.TilePainter import paint_tile
 from src.Player import Player
+from src.Block import Block
+import src.BlockTypes as BlockTypes
 
 
 class PlaceholderGame(Game):
@@ -15,6 +17,7 @@ class PlaceholderGame(Game):
         self.fps = 0
         self.player1 = Player(50, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
+        self.block = Block(5,100,256,256,BlockTypes.array[2],(0, 1),0,Color.BLACK)
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -47,6 +50,8 @@ class PlaceholderGame(Game):
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
 
+        self.block.move(dt)
+
     # Called after loop(), renders the game screen
     def render(self):
         self.surface.fill(Color.BLACK)
@@ -58,7 +63,7 @@ class PlaceholderGame(Game):
         # paint_tile(self.surface, 148, 148, 128, 128, Color.MAGENTA)
 
         # paint_tile(self.surface, 60, 300, 16, 16, Color.ORANGE)
-
+        self.block.draw(self.surface)
         pygame.draw.rect(self.surface, self.player1.color,
                          pygame.Rect(self.player1.x, self.player1.y,
                                      self.player1.width, self.player1.height))
