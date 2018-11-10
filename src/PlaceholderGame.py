@@ -1,5 +1,4 @@
 import pygame
-from src.GameField import GameField
 from src.Game import Game
 import src.Colors as Color
 import src.Config as Config
@@ -8,8 +7,8 @@ from src.Player import Player
 
 
 class PlaceholderGame(Game):
+
     def __init__(self):
-        self.game_field = GameField()
         super().__init__()
         self.fps_font = None
         self.fps = 0
@@ -48,8 +47,13 @@ class PlaceholderGame(Game):
         self.player1.y += self.player1.v_y
 
     # Called after loop(), renders the game screen
+
     def render(self):
         self.surface.fill(Color.BLACK)
+
+        pygame.draw.rect(self.surface, self.player1.color, pygame.Rect(
+                         self.player1.x, self.player1.y,
+                         self.player1.width, self.player1.height))
         self.game_field.draw(self.surface)
 
         # paint_tile(self.surface, 20, 20, 128, 128, Color.RED)
@@ -68,3 +72,13 @@ class PlaceholderGame(Game):
         self.surface.blit(fps_surface, (0, 0))
 
         pygame.display.update()
+
+    def run(self):
+        self.running = True
+        while self.running:
+            for event in pygame.event.get():
+                self._handle_event(event)
+            self.loop(self.clock.get_time()/1000)
+            self.render()
+            self.clock.tick(60)
+        self._clean_up()
