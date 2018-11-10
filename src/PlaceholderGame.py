@@ -21,14 +21,14 @@ class PlaceholderGame(Game):
         self.block = Block(
             5, 100, 256, 256, BlockTypes.array[2], (0, 1), 0, Color.BLACK)
 
-        self.emitter = ParticleFieldEmitter(color_begin=Color.GRAY,
-                                            color_end=Color.BLACK,
-                                            color_jitter=0.1, pos=(256, 256),
-                                            size=(32, 8), velocity=(16, -8),
-                                            velocity_jitter=(4, 4),
-                                            accel=(0, -4), gen_delay=0.01,
-                                            duration=4, size_begin=6,
-                                            size_end=0)
+        self.emitter = ParticleFieldEmitter(
+            colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] +
+                    [Color.GRAY] * 2 + [Color.DARK_GRAY,
+                                        Color.darker(Color.DARK_GRAY, 2),
+                                        Color.BLACK]),
+            pos=(256, 256), size=(32, 8), velocity=(16, -8),
+            velocity_jitter=(4, 4), accel=(0, -4), gen_delay=0.01, duration=4,
+            sizes=[3, 5, 8, 6, 8, 16])
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -50,13 +50,13 @@ class PlaceholderGame(Game):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            print(self.player1.x, Config.GAMEFIELD_LEFT_BORDER)
+            # print(self.player1.x, Config.GAMEFIELD_LEFT_BORDER)
             self.player1.moveLeft()
             self.player1.left = True
             self.player1.right = False
             self.player1.facing = False
         if keys[pygame.K_RIGHT]:
-            print(self.player1.x, Config.GAMEFIELD_RIGHT_BORDER)
+            # print(self.player1.x, Config.GAMEFIELD_RIGHT_BORDER)
             self.player1.moveRight()
             self.player1.left = False
             self.player1.right = True
@@ -72,8 +72,8 @@ class PlaceholderGame(Game):
             self.player1.v_x = 0
             self.player1.x = Config.GAMEFIELD_LEFT_BORDER
         elif (int(self.player1.x) >
-                ((int(Config.GAMEFIELD_RIGHT_BORDER)) -
-                    Config.PLAYER_WIDTH) - self.player1.v_x):
+              ((int(Config.GAMEFIELD_RIGHT_BORDER)) -
+               Config.PLAYER_WIDTH) - self.player1.v_x):
             self.player1.v_x = 0
             self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
                               Config.PLAYER_WIDTH)
@@ -90,7 +90,7 @@ class PlaceholderGame(Game):
                 if self.player1.jumpspeed > 0:
                     neg = 1
                 self.player1.v_y = (self.player1.jumpspeed ** 2) * 0.2 * neg
-                print(self.player1.v_y)
+                # print(self.player1.v_y)
                 self.player1.jumpspeed += 1
 
         if (int(self.player1.y) >

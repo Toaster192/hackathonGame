@@ -1,18 +1,16 @@
 import pygame
 from time import time
+from src.util import interpolate, interpolate_tuple
 
 
 class Particle:
-    def __init__(self, color_begin, color_end, pos, velocity, accel, duration,
-                 size_begin, size_end):
-        self.color_begin = color_begin
-        self.color_end = color_end
+    def __init__(self, colors, pos, velocity, accel, duration, sizes):
+        self.colors = colors
         self.pos = pos
         self.velocity = velocity
         self.accel = accel
         self.duration = duration
-        self.size_begin = size_begin
-        self.size_end = size_end
+        self.sizes = sizes
         self.start_time = time()
 
     def update(self, dt):
@@ -28,9 +26,7 @@ class Particle:
             return
 
         life = (time() - self.start_time) / self.duration
-        size = int((1 - life) * self.size_begin + life * self.size_end)
-        color = tuple(
-            int((1 - life) * b + life * e) for b, e in
-            zip(self.color_begin, self.color_end))
+        size = interpolate(self.sizes, life)
+        color = interpolate_tuple(self.colors, life)
 
-        pygame.draw.circle(surface, color, tuple(map(int, self.pos)), size)
+        pygame.draw.circle(surface, color, tuple(map(int, self.pos)), int(size))

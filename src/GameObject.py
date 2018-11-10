@@ -21,7 +21,7 @@ class GameObject:
     def __init__(self, x, y, w, h, speed=(0, 0)):
         self.bounds = Bounds(x, y, w, h)
         self.speed = speed
-        print(self.bounds.x)
+        # print(self.bounds.x)
         #self.bounds = Rect(float(x),float(y),float(w),float(h))
 
     @property
