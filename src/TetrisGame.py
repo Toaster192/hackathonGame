@@ -9,11 +9,16 @@ from src.Player import Player
 from .Vector import Vector2
 import socket as s
 import pickle
+from src.Menu import Menu
+
 
 class Data:
-    def __init__(self, blocks, player):
+    def __init__(self, blocks, players):
         self.blocks = blocks
-        self.player = player
+        self.players = list()
+        for player in players:
+            self.players.append((player.pos.x, player.pos.y, player.v.x, player.v.y))
+
 
 class TetrisGame(Game):
     def __init__(self):
@@ -23,34 +28,46 @@ class TetrisGame(Game):
         self.fps = 0
         self.block_speed = Config.BLOCK_SPEED
         self.generator = BlockGenerator()
-        self.player1 = None
-        self.player2 = None
+        self.players = []
         self.blocks = [self.generator.generate(self.block_speed)]
-        self.socket = s.socket()
-        self.socket_out = s.socket()
-        self.smth = None
+        self.sockets = list()
+        self.connections = list()
+        self.menu = None
+        self.number_of_players = 0
 
 
     # Gets called at the start of the game
     def init(self, window_name, size):
         super().init(window_name, size)
-        self.player1 = Player(Config.GAMEFIELD_LEFT_BORDER +
+        self.menu = Menu()
+        #print(self.menu.show(self.surface))
+        number_of_players = self.menu.show(self.surface)
+        if number_of_players == 0:
+            self.running = False
+        for i in range(0, number_of_players):
+            self.players.append(Player(Config.GAMEFIELD_LEFT_BORDER +
                               (Config.GAMEFIELD_WIDTH // 2),
                               Config.GAMEFIELD_BOTTOM_BORDER -
                               Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
-                              Config.PLAYER_HEIGHT, Color.RED)
+                              Config.PLAYER_HEIGHT, Color.RED))
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
-        host = "127.0.0.5"
-        port = 12345
-        self.socket.bind((host, port))
-        self.socket.listen(5)
-        self.smth, neco = self.socket.accept()
+        host = "127.0.0.23"
+        port = 12346
+        print(self.players)
+        self.sockets.append(s.socket())
+        for i in range(0, number_of_players - 1):
+            self.sockets[0].bind((host, port))
+            self.sockets[0].listen(5)
+            conn, neco = self.sockets[0].accept()
+            self.connections.append(conn)
+            print(i, " players connected")
 
         #self.socket_out.bind(("127.0.0.2", port))
 
     # Gets called at game end (pressed [X])
     def clean_up(self):
-        self.socket.close()
+        for socket in self.sockets:
+            socket.close()
 
     # Gets called on PyGame event
     def handle_event(self, event):
@@ -61,13 +78,30 @@ class TetrisGame(Game):
     # Called every frame, dt is time between frames
     def loop(self, dt):
         self.fps = 0 if dt == 0 else int(1 / dt)
-        d = Data(self.blocks, self.player1)
-        self.smth.send(pickle.dumps(d))
-        d = pickle.loads(self.smth.recv(16000))
-        self.player2 = d.player
-        keys = pygame.key.get_pressed()
-        self.player1.update(dt, keys, self.blocks)
-        self.player2.update(dt, keys, self.blocks)
+        d = bytes()
+        #if len(self.players) > 1:
+            #dat = Data(self.blocks, self.players)
+            #print(dat)
+            #d = pickle.dumps(dat)
+        print(pickle)
+        for conn in self.connections:
+            d = Data(self.blocks, self.players)
+            conn.send(pickle.dumps(d, pickle.HIGHEST_PROTOCOL))
+        for index, conn in enumerate(self.connections, 1):
+            d = conn.recv(16000)
+            if d is not None:
+                self.players[index] = Player(Config.GAMEFIELD_LEFT_BORDER +
+                              (Config.GAMEFIELD_WIDTH // 2),
+                              Config.GAMEFIELD_BOTTOM_BORDER -
+                              Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
+                              Config.PLAYER_HEIGHT, Color.RED)
+                self.players[index].set_state(*pickle.loads(d).players[0])
+        for i, player in enumerate(self.players):
+            keys = pygame.key.get_pressed()
+            if i == 0:
+                player.update(dt, keys, self.blocks)
+            else:
+                player.update(dt, None, self.blocks)
 
         for i, block in enumerate(self.blocks):
             if block.falling:
@@ -90,8 +124,8 @@ class TetrisGame(Game):
         for block in self.blocks:
             block.render(self.surface)
 
-        self.player1.render(self.surface)
-        self.player2.render(self.surface)
+        for player in self.players:
+            player.render(self.surface)
 
         # self.emitter.render(self.surface)
 

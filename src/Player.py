@@ -41,6 +41,10 @@ class Player:
             accel=Vector2(0, -12), gen_delay=0.01, duration=2,
             sizes=[3, 5, 8, 6, 8, 16])
 
+    def set_state(self, x, y, vx, vy):
+        self.pos = Vector2(x, y)
+        self.v = Vector2(vx, vy)
+
     def moveLeft(self, dt):
         if self.v.x > 0:
             self.stopMoving(dt)
@@ -80,17 +84,18 @@ class Player:
     def update(self, dt, keys, blocks):
         surroundings = self.calculate_surroundings(blocks)
 
-        if keys[pygame.K_LEFT]:
-            self.moveLeft(dt)
-            self.facing = False
+        if(keys is not None):
+            if keys[pygame.K_LEFT]:
+                self.moveLeft(dt)
+                self.facing = False
 
-        if keys[pygame.K_RIGHT]:
-            self.moveRight(dt)
-            self.facing = False
+            if keys[pygame.K_RIGHT]:
+                self.moveRight(dt)
+                self.facing = False
 
-        if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
-            self.stopMoving(dt)
-            self.facing = True
+            if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
+                self.stopMoving(dt)
+                self.facing = True
 
         left_border = int(max(self.check_collision_left(surroundings),
                               Config.GAMEFIELD_LEFT_BORDER))
@@ -106,8 +111,9 @@ class Player:
                 self.v.x = 0
                 self.pos.x = (right_border - Config.PLAYER_WIDTH)
 
-        if keys[pygame.K_UP]:
-            self.jump()
+        if keys is not None:
+            if keys[pygame.K_UP]:
+                self.jump()
 
         self.v += Vector2(0, Config.PLAYER_GRAVITY * dt)
         self.pos += self.v * dt
