@@ -1,4 +1,5 @@
-from pygame.rect import Rect
+# from pygame.rect import Rect
+
 
 class Bounds:
     def __init__(self, x, y, w, h):
@@ -22,7 +23,7 @@ class GameObject:
         self.bounds = Bounds(x, y, w, h)
         self.speed = speed
         # print(self.bounds.x)
-        #self.bounds = Rect(float(x),float(y),float(w),float(h))
+        # self.bounds = Rect(float(x),float(y),float(w),float(h))
 
     @property
     def left(self):

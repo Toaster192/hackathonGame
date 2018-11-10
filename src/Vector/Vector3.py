@@ -1,4 +1,7 @@
 import numbers
+from re import match
+
+from . import Vector2
 
 
 class Vector3:
@@ -37,3 +40,30 @@ class Vector3:
         if not isinstance(other, numbers.Number) or other == 0:
             raise ArithmeticError
         return Vector3(self.x // other, self.y // other, self.z // other)
+
+    def length(self):
+        return (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
+
+    def distance(self, other):
+        if not isinstance(other, Vector2):
+            raise ArithmeticError
+        return (self - other).length()
+
+    def manhattan_distance(self, other):
+        if not isinstance(other, Vector2):
+            raise ArithmeticError
+        return abs(self.x - other.x) + abs(self.y - other.y) + abs(
+            self.z - other.z)
+
+    # Vector swizzling
+    def __getattr__(self, key):
+        if match('^[xyz]{2}$', key):
+            v = []
+            for c in key:
+                v.append(getattr(self, c))
+            return Vector2(*v)
+        elif match('^[xyz]{3}$', key):
+            v = []
+            for c in key:
+                v.append(getattr(self, c))
+            return Vector3(*v)

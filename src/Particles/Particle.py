@@ -1,6 +1,6 @@
 import pygame
 from time import time
-from src.util import interpolate, interpolate_tuple
+from src.util import interpolate
 from src.Vector import Vector3
 
 
@@ -27,6 +27,8 @@ class Particle:
 
         life = (time() - self.start_time) / self.duration
         size = interpolate(self.sizes, life)
-        color = interpolate(list(map(lambda t: Vector3(*t), self.colors)), life)
+        color = interpolate(list(map(lambda t: Vector3(*t), self.colors)),
+                            life)
 
-        pygame.draw.circle(surface, color.floor().tuple(), self.pos.floor().tuple(), int(size))
+        pygame.draw.circle(surface, color.floor().tuple(),
+                           self.pos.floor().tuple(), int(size))

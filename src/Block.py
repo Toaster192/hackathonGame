@@ -1,7 +1,8 @@
-from src.Square import Square
-from src.GameObject import GameObject
 import pygame
+
 import src.Config as Config
+from src.GameObject import GameObject
+from src.Square import Square
 
 
 class Block(GameObject):
@@ -15,6 +16,7 @@ class Block(GameObject):
         self.speed = speed
         self.color = color
         self.falling = falling
+        self.generatedNew = False
         self.objects = list(map(lambda t: self.createBlock(t[0], t[1]), array))
 
     def createBlock(self, x, y):
@@ -24,19 +26,20 @@ class Block(GameObject):
         for square in self.objects:
             square.render(surface)
 
-    def move(self, dt, blocks, *speed):
+    def move(self, dt, blocks, genHeight, *speed):
         for square in self.objects:
-            if square.detects_collision(blocks) and self.falling == True:
+            if square.detects_collision(blocks) and self.falling:
                 self.falling = False
                 for square in self.objects:
                     square.speed = (0, 0)
-                    #ONE-LINER - DON'T ASK, DON'T WANT ME TO DO ANYTHING WITH IT AGAIN
-                    square.bounds.y = Config.GAMEFIELD_BOTTOM_BORDER - 1 - \
-                                      ((Config.GAMEFIELD_BOTTOM_BORDER - (square.bounds.y)) // \
-                                       Config.BLOCK_HEIGHT) * Config.BLOCK_HEIGHT
+                    # ONE-LINER - DON'T ASK,
+                    # DON'T WANT ME TO DO ANYTHING WITH IT AGAIN
+                    square.bounds.y = (Config.GAMEFIELD_BOTTOM_BORDER - 1 -
+                                       ((Config.GAMEFIELD_BOTTOM_BORDER -
+                                        (square.bounds.y)) //
+                                        Config.BLOCK_HEIGHT) *
+                                       Config.BLOCK_HEIGHT)
                 self.speed = (0, 0)
-                event = pygame.event.Event(pygame.USEREVENT, {"ev": "block_falled"})
-                pygame.event.post(event)
 
         for square in self.objects:
             square.update(dt)
@@ -44,3 +47,10 @@ class Block(GameObject):
         if self.speed != (0, 0):
             self.x += self.speed[0] * dt
             self.y += self.speed[1] * dt
+
+        if (not self.generatedNew and (self.y >= genHeight or
+                                       not self.falling)):
+            event = pygame.event.Event(pygame.USEREVENT,
+                                       {"ev": "block_falled"})
+            pygame.event.post(event)
+            self.generatedNew = True

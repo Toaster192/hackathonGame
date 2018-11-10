@@ -1,11 +1,11 @@
 import pygame
-from src.GameField import GameField
-from src.Game import Game
+
 import src.Colors as Color
 import src.Config as Config
-from src.Player import Player
-from .Particles import ParticleFieldEmitter
 from src.BlockGenerator import BlockGenerator
+from src.Game import Game
+from src.GameField import GameField
+from src.Player import Player
 from .Vector import Vector2
 import socket as s
 import pickle
@@ -21,27 +21,24 @@ class TetrisGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
-        self.block_speed = (0, 150)
+        self.block_speed = Config.BLOCK_SPEED
         self.generator = BlockGenerator()
-        self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
-                              Config.PLAYER_HEIGHT, Color.RED)
-        self.player2 = Player(100, 50,Config.PLAYER_WIDTH, Config.PLAYER_HEIGHT, Color.RED)
+        self.player1 = None
+        self.player2 = None
         self.blocks = [self.generator.generate(self.block_speed)]
         self.socket = s.socket()
         self.socket_out = s.socket()
         self.smth = None
-        self.emitter = ParticleFieldEmitter(
-            colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] + [
-                Color.GRAY] * 2 + [Color.DARK_GRAY,
-                                   Color.darker(Color.DARK_GRAY, 2),
-                                   Color.BLACK]), pos=Vector2(256, 256),
-            size=Vector2(32, 8), velocity=Vector2(16, -8),
-            velocity_jitter=Vector2(4, 4), accel=Vector2(0, -4), gen_delay=0.01,
-            duration=4, sizes=[3, 5, 8, 6, 8, 16])
+
 
     # Gets called at the start of the game
     def init(self, window_name, size):
         super().init(window_name, size)
+        self.player1 = Player(Config.GAMEFIELD_LEFT_BORDER +
+                              (Config.GAMEFIELD_WIDTH // 2),
+                              Config.GAMEFIELD_BOTTOM_BORDER -
+                              Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
+                              Config.PLAYER_HEIGHT, Color.RED)
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
         host = "127.0.0.5"
         port = 12345
@@ -72,12 +69,12 @@ class TetrisGame(Game):
         self.player1.update(dt, keys, self.blocks)
         self.player2.update(dt, keys, self.blocks)
 
-        self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
-
-        # self.emitter.update(dt)
+        for i, block in enumerate(self.blocks):
+            if block.falling:
+                block.move(dt, self.blocks[:i] + self.blocks[i+1:],
+                           Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING)
 
     # Called after loop(), renders the game screen
-
     def render(self):
         self.surface.fill(Color.BLACK)
 
