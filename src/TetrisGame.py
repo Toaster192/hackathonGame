@@ -31,7 +31,7 @@ class TetrisGame(Game):
                               (Config.GAMEFIELD_WIDTH // 2),
                               Config.GAMEFIELD_BOTTOM_BORDER -
                               Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
-                              Config.PLAYER_HEIGHT, Color.BLACK, 'img/p1_left.png', 'img/p1_right.png')
+                              Config.PLAYER_HEIGHT, Color.BLACK, 'img/p2_left.png', 'img/p2_right.png')
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
         self.wasted_font = pygame.font.Font('FreeMono.ttf', 46)
         self.wasted_surface = \
