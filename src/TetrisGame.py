@@ -52,7 +52,10 @@ class TetrisGame(Game):
         keys = pygame.key.get_pressed()
         self.player1.update(dt, keys, self.blocks)
 
-        self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
+        for i, block in enumerate(self.blocks):
+            if block.falling:
+                block.move(dt, self.blocks[:i] + self.blocks[i+1:],
+                           Config.SCREEN_HEIGHT // Config.BLOCKS_FALLING)
 
     # Called after loop(), renders the game screen
     def render(self):

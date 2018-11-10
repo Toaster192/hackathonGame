@@ -24,3 +24,4 @@ COLLISION_DISTANCE = 6  # block widths from player origin
 
 BLOCK_FELL_EVENT = pygame.USEREVENT + 1
 PLAYER_DEAD_EVENT = pygame.USEREVENT + 2
+BLOCKS_FALLING = 10

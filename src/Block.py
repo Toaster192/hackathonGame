@@ -16,6 +16,7 @@ class Block(GameObject):
         self.speed = speed
         self.color = color
         self.falling = falling
+        self.generatedNew = False
         self.objects = list(map(lambda t: self.createBlock(t[0], t[1]), array))
 
     def createBlock(self, x, y):
@@ -25,7 +26,7 @@ class Block(GameObject):
         for square in self.objects:
             square.render(surface)
 
-    def move(self, dt, blocks, *speed):
+    def move(self, dt, blocks, genHeight, *speed):
         for square in self.objects:
             if square.detects_collision(blocks) and self.falling:
                 self.falling = False
@@ -50,3 +51,10 @@ class Block(GameObject):
         if self.speed != (0, 0):
             self.x += self.speed[0] * dt
             self.y += self.speed[1] * dt
+
+        if (not self.generatedNew and (self.y >= genHeight or
+                                       not self.falling)):
+            event = pygame.event.Event(pygame.USEREVENT,
+                                       {"ev": "block_falled"})
+            pygame.event.post(event)
+            self.generatedNew = True
