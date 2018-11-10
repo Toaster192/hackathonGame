@@ -1,5 +1,6 @@
 from pygame.rect import Rect
 
+
 class GameObject:
     def __init__(self, x, y, w, h, speed=(0,0)):
         self.bounds = Rect(x, y, w, h)
@@ -44,11 +45,11 @@ class GameObject:
     def draw(self, surface):
         pass
  
-    def move(self, dx, dy):
-        self.bounds = self.bounds.move(dx, dy)
+    def move(self, dt, dx, dy):
+        self.bounds = self.bounds.move(dx*dt, dy*dt)
  
-    def update(self):
+    def update(self, dt):
         if self.speed == [0, 0]:
             return
  
-        self.move(*self.speed)
+        self.move(dt, *self.speed)

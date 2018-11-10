@@ -1,18 +1,23 @@
 import pygame
-from time import time
 
 
 class Game:
     def __init__(self):
+        self.clock = pygame.time.Clock()
         self.surface = None
         self.running = False
-        self._time = 0
+        self.size = (0, 0)
 
-    def init_screen(self, window_name, size):
+    def init(self, window_name, size):
+        self.size = size
+
         pygame.init()
+        pygame.display.init()
         self.surface = pygame.display.set_mode(
             size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         pygame.display.set_caption(window_name)
+
+        pygame.font.init()
 
     def _clean_up(self):
         self.clean_up()
@@ -37,12 +42,10 @@ class Game:
 
     def run(self):
         self.running = True
-        self._time = time()
         while self.running:
-            newtime = time()
             for event in pygame.event.get():
                 self._handle_event(event)
-            self.loop(newtime - self._time)
+            self.loop(self.clock.get_time()/1000)
             self.render()
-            self._time = newtime
+            self.clock.tick(60)
         self._clean_up()
