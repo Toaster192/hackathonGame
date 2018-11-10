@@ -20,6 +20,11 @@ class Player:
         self.v = Vector2(0, 0)
         self.speed = Config.PLAYER_MAX_SPEED
 
+        pygame.display.init()
+        self.image = pygame.image.load('face.png')
+        self.image.convert()
+        self.image = pygame.transform.scale(self.image, (Config.PLAYER_WIDTH, Config.PLAYER_WIDTH))
+
         self.emitter = ParticleFieldEmitter(
             colors=(
                 [Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED, Color.GRAY,
@@ -107,6 +112,7 @@ class Player:
         pygame.draw.rect(surface, self.color,
                          pygame.Rect(self.pos.x, self.pos.y, self.size.x,
                                      self.size.y))
+        surface.blit(self.image, pygame.Rect(self.pos.x, self.pos.y, self.size.x, self.size.x))
         # self.emitter.render(surface)
 
     def calculate_surroundings(self, blocks):

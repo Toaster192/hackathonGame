@@ -16,15 +16,14 @@ class TetrisGame(Game):
         self.fps = 0
         self.block_speed = (0, 150)
         self.generator = BlockGenerator()
-        self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
-                              Config.PLAYER_HEIGHT, Color.RED)
+        self.player1 = None
         self.blocks = [self.generator.generate(self.block_speed)]
-
-
 
     # Gets called at the start of the game
     def init(self, window_name, size):
         super().init(window_name, size)
+        self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
+                              Config.PLAYER_HEIGHT, Color.RED)
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
 
     # Gets called at game end (pressed [X])
@@ -46,10 +45,7 @@ class TetrisGame(Game):
 
         self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
 
-        # self.emitter.update(dt)
-
     # Called after loop(), renders the game screen
-
     def render(self):
         self.surface.fill(Color.BLACK)
 
