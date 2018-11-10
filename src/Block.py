@@ -26,16 +26,20 @@ class Block(GameObject):
 
     def move(self, dt, blocks, *speed):
         for square in self.objects:
-            if square.detects_collision(blocks) and self.falling == True:
+            if square.detects_collision(blocks) and self.falling:
                 self.falling = False
                 for square in self.objects:
                     square.speed = (0, 0)
-                    #ONE-LINER - DON'T ASK, DON'T WANT ME TO DO ANYTHING WITH IT AGAIN
-                    square.bounds.y = Config.GAMEFIELD_BOTTOM_BORDER - 1 - \
-                                      ((Config.GAMEFIELD_BOTTOM_BORDER - (square.bounds.y)) // \
-                                       Config.BLOCK_HEIGHT) * Config.BLOCK_HEIGHT
+                    # ONE-LINER - DON'T ASK,
+                    # DON'T WANT ME TO DO ANYTHING WITH IT AGAIN
+                    square.bounds.y = (Config.GAMEFIELD_BOTTOM_BORDER - 1 -
+                                       ((Config.GAMEFIELD_BOTTOM_BORDER -
+                                        (square.bounds.y)) //
+                                        Config.BLOCK_HEIGHT) *
+                                       Config.BLOCK_HEIGHT)
                 self.speed = (0, 0)
-                event = pygame.event.Event(pygame.USEREVENT, {"ev": "block_falled"})
+                event = pygame.event.Event(pygame.USEREVENT,
+                                           {"ev": "block_falled"})
                 pygame.event.post(event)
 
         for square in self.objects:
