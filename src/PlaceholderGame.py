@@ -50,12 +50,16 @@ class PlaceholderGame(Game):
         if keys[pygame.K_UP]:
             self.player1.jump()
 
-        if int(self.player1.x) < int(Config.GAMEFIELD_LEFT_BORDER):
+        if (int(self.player1.x) <
+                int(Config.GAMEFIELD_LEFT_BORDER) - self.player1.v_x):
             self.player1.v_x = 0
             self.player1.x = Config.GAMEFIELD_LEFT_BORDER
-        elif int(self.player1.x) > ((int(Config.GAMEFIELD_RIGHT_BORDER)) - Config.PLAYER_WIDTH):
+        elif (int(self.player1.x) >
+                ((int(Config.GAMEFIELD_RIGHT_BORDER)) -
+                    Config.PLAYER_WIDTH) - self.player1.v_x):
             self.player1.v_x = 0
-            self.player1.x = Config.GAMEFIELD_RIGHT_BORDER - Config.PLAYER_WIDTH
+            self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
+                              Config.PLAYER_WIDTH)
 
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
