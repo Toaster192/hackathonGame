@@ -12,6 +12,7 @@ YELLOW = (255, 255, 0)
 
 ORANGE = (255, 165, 0)
 
+colors = (RED, GREEN, BLUE)
 
 def darker(color, magnitude=1.25):
     return tuple(int(c/magnitude) for c in color)
