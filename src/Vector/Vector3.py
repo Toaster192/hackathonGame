@@ -1,4 +1,5 @@
 import numbers
+from re import match
 
 from . import Vector2
 
