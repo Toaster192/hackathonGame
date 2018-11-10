@@ -13,6 +13,7 @@ from src.util import interpolate
 
 class TetrisGame(Game):
     particle_hooks = []
+    highscore = 0
 
     def __init__(self):
         super().__init__()
@@ -96,6 +97,11 @@ class TetrisGame(Game):
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
         self.surface.blit(fps_surface, (0, 0))
+        if (-self.player1.pos.y + Config.SCREEN_HEIGHT > self.highscore):
+            self.highscore = -self.player1.pos.y + Config.SCREEN_HEIGHT
+        score_surface = \
+            self.fps_font.render('Score: ' + str(int(self.highscore)), True, Color.GRAY)
+        self.surface.blit(score_surface, (0, 20))
 
         if self.player1.dead:
             self.surface.blit(self.wasted_bg, (
