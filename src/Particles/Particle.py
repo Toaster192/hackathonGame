@@ -1,6 +1,7 @@
 import pygame
 from time import time
 from src.util import interpolate, interpolate_tuple
+from src.Vector import Vector3
 
 
 class Particle:
@@ -17,9 +18,8 @@ class Particle:
         if self.start_time + self.duration < time():
             return
 
-        self.velocity = tuple(
-            v + a * dt for v, a in zip(self.velocity, self.accel))
-        self.pos = tuple(p + v * dt for p, v in zip(self.pos, self.velocity))
+        self.velocity += self.accel * dt
+        self.pos += self.velocity * dt
 
     def render(self, surface):
         if self.start_time + self.duration < time():
@@ -27,6 +27,6 @@ class Particle:
 
         life = (time() - self.start_time) / self.duration
         size = interpolate(self.sizes, life)
-        color = interpolate_tuple(self.colors, life)
+        color = interpolate(list(map(lambda t: Vector3(*t), self.colors)), life)
 
-        pygame.draw.circle(surface, color, tuple(map(int, self.pos)), int(size))
+        pygame.draw.circle(surface, color.floor().tuple(), self.pos.floor().tuple(), int(size))

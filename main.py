@@ -1,5 +1,6 @@
 from src import PlaceholderGame
 import src.Config as Config
+from src.Vector import Vector2
 
 
 def main():

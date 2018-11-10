@@ -1,6 +1,7 @@
 from time import time
 from random import uniform
 from .Particle import Particle
+from src.Vector import Vector2
 
 
 class ParticleFieldEmitter:
@@ -24,10 +25,11 @@ class ParticleFieldEmitter:
 
     def update(self, dt):
         while self.next_particle_time < time():
-            random_pos = tuple(
-                p + uniform(0, s) for p, s in zip(self.pos, self.size))
-            random_vel = tuple(v + uniform(-j, j) for v, j in
-                               zip(self.velocity, self.velocity_jitter))
+            random_pos = self.pos + Vector2(uniform(0, self.size.x),
+                                           uniform(0, self.size.y))
+            j = self.velocity_jitter
+            random_vel = self.velocity + Vector2(uniform(-j.x, j.x),
+                                                uniform(-j.y, j.y))
 
             self.particles.append(
                 Particle(self.colors, random_pos, random_vel, self.accel,

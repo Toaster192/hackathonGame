@@ -9,6 +9,7 @@ from .Particles import ParticleFieldEmitter
 from src.Block import Block
 import src.BlockTypes as BlockTypes
 from src.BlockGenerator import BlockGenerator
+from .Vector import Vector2
 
 
 class PlaceholderGame(Game):
@@ -28,9 +29,9 @@ class PlaceholderGame(Game):
                     [Color.GRAY] * 2 + [Color.DARK_GRAY,
                                         Color.darker(Color.DARK_GRAY, 2),
                                         Color.BLACK]),
-            pos=(256, 256), size=(32, 8), velocity=(16, -8),
-            velocity_jitter=(4, 4), accel=(0, -4), gen_delay=0.1, duration=4,
-            sizes=[3, 5, 8, 6, 8, 16])
+            pos=Vector2(256, 256), size=Vector2(32, 8), velocity=Vector2(16, -8),
+            velocity_jitter=Vector2(4, 4), accel=Vector2(0, -4), gen_delay=0.01,
+            duration=4, sizes=[3, 5, 8, 6, 8, 16])
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -81,8 +82,8 @@ class PlaceholderGame(Game):
                               Config.PLAYER_WIDTH)
 
         if pygame.event.poll().type == pygame.USEREVENT:
-            self.block = generator.generate((0,50))
-        if not(self.player1.jumping):
+            self.block = BlockGenerator.generate((0, 50))
+        if not (self.player1.jumping):
             if keys[pygame.K_UP]:
                 self.player1.jumping = True
                 self.player1.right = False
@@ -98,7 +99,8 @@ class PlaceholderGame(Game):
                 self.player1.jumpspeed += 1
 
         if (int(self.player1.y) >
-                int(Config.GAMEFIELD_BOTTOM_BORDER - Config.PLAYER_HEIGHT) - self.player1.v_y):
+                int(
+                    Config.GAMEFIELD_BOTTOM_BORDER - Config.PLAYER_HEIGHT) - self.player1.v_y):
             self.player1.v_y = 0
             self.player1.y = (Config.GAMEFIELD_BOTTOM_BORDER -
                               Config.PLAYER_HEIGHT)

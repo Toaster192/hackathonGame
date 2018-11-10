@@ -9,7 +9,8 @@ class BlockGenerator():
     def __init__(self):
         pass
 
-    def generate(self, speed):
+    @staticmethod
+    def generate(speed):
         generated_type = random.choice(BlockTypes.array)
 
         # Rotate - TODO
