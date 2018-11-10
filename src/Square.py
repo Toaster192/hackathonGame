@@ -15,8 +15,13 @@ class Square(GameObject):
     def draw(self, surface):
         paint_tile(surface, self.bounds.x, self.bounds.y, self.bounds.w,
                    self.bounds.height, Colors.CYAN)
-
-    def detects_collision(self, mode, direction=""):
-        if self.bounds.y + self.bounds.height >= Config.GAMEFIELD_BOTTOM_BORDER - 1:
+    #THE 7.999 JUST WORKS - DON'T ASK ME WHY
+    def detects_collision(self, blocks):
+        if self.bounds.y + self.bounds.height + 7.999 >= Config.GAMEFIELD_BOTTOM_BORDER - 1:
             return True
+        for block in blocks:
+            for square in block.objects:
+                if self.bounds.y + self.bounds.height + 7.999 >= square.bounds.y - 1 and \
+                        self.bounds.x == square.bounds.x:
+                    return True
         return False

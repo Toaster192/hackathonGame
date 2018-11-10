@@ -18,7 +18,7 @@ class PlaceholderGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
-        self.block_speed = (0, 50)
+        self.block_speed = (0, 150)
         self.generator = BlockGenerator()
         self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
@@ -46,7 +46,7 @@ class PlaceholderGame(Game):
     def handle_event(self, event):
         print(event)
         if event.type == pygame.USEREVENT:
-            self.blocks.append(self.generator.generate((0, 50)))
+            self.blocks.append(self.generator.generate(self.block_speed))
 
     # Called every frame, dt is time between frames
     def loop(self, dt):
@@ -55,7 +55,7 @@ class PlaceholderGame(Game):
         keys = pygame.key.get_pressed()
         self.player1.update(dt, keys)
 
-        self.blocks[len(self.blocks) - 1].move(dt)
+        self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
 
         # self.emitter.update(dt)
 
