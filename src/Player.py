@@ -108,7 +108,6 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt, keys, blocks):
         surroundings = self.calculate_surroundings(blocks)
-        print("self_pos:{0}".format(self.pos.x))
         if keys[pygame.K_LEFT]:
             if self.left:
                 self.walkCount += 1
