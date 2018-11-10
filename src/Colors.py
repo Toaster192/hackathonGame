@@ -13,7 +13,7 @@ YELLOW = (255, 255, 0)
 
 ORANGE = (255, 165, 0)
 
-colors = (RED, GREEN, BLUE)
+colors = (RED, GREEN, BLUE, CYAN, MAGENTA, YELLOW, ORANGE)
 
 
 def darker(color, magnitude=1.25):
