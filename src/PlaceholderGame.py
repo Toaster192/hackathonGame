@@ -41,22 +41,21 @@ class PlaceholderGame(Game):
 
         if keys[pygame.K_LEFT]:
             print(self.player1.x, Config.GAMEFIELD_LEFT_BORDER)
-            if int(self.player1.x) <= int(Config.GAMEFIELD_LEFT_BORDER) + 1:
-                self.player1.v_x = 0
-                self.player1.x = Config.GAMEFIELD_LEFT_BORDER
-            else:
-                self.player1.moveLeft()
+            self.player1.moveLeft()
         if keys[pygame.K_RIGHT]:
-            print(Config.PLAYER_WIDTH)
-            if int(self.player1.x) >= ((int(Config.GAMEFIELD_RIGHT_BORDER) - 1) - Config.PLAYER_WIDTH):
-                self.player1.v_x = 0
-                self.player1.x = Config.GAMEFIELD_RIGHT_BORDER - Config.PLAYER_WIDTH
-            else:
-                self.player1.moveRight()
+            print(self.player1.x, Config.GAMEFIELD_RIGHT_BORDER)
+            self.player1.moveRight()
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
             self.player1.stopMoving()
         if keys[pygame.K_UP]:
             self.player1.jump()
+
+        if int(self.player1.x) < int(Config.GAMEFIELD_LEFT_BORDER):
+            self.player1.v_x = 0
+            self.player1.x = Config.GAMEFIELD_LEFT_BORDER
+        elif int(self.player1.x) > ((int(Config.GAMEFIELD_RIGHT_BORDER)) - Config.PLAYER_WIDTH):
+            self.player1.v_x = 0
+            self.player1.x = Config.GAMEFIELD_RIGHT_BORDER - Config.PLAYER_WIDTH
 
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
