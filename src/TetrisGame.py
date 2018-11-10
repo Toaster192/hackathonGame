@@ -41,7 +41,7 @@ class TetrisGame(Game):
 
     # Gets called on PyGame event
     def handle_event(self, event):
-        print(event)
+        # print(event)
         if event.type == pygame.USEREVENT:
             self.blocks.append(self.generator.generate(self.block_speed))
 
@@ -50,7 +50,7 @@ class TetrisGame(Game):
         self.fps = 0 if dt == 0 else int(1 / dt)
 
         keys = pygame.key.get_pressed()
-        self.player1.update(dt, keys)
+        self.player1.update(dt, keys, self.blocks)
 
         self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
 

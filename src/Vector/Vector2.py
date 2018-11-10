@@ -36,3 +36,8 @@ class Vector2:
         if not isinstance(other, numbers.Number) or other == 0:
             raise ArithmeticError
         return Vector2(self.x // other, self.y // other)
+
+    def manhattan_distance(self, other):
+        if not isinstance(other, Vector2):
+            raise ArithmeticError
+        return abs(self.x - other.x) + abs(self.y - other.y)
