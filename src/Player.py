@@ -96,7 +96,6 @@ class Player(pygame.sprite.Sprite):
         if not self.jumping:
             self.jumping = True
             self.v.y = -self.jumpspeed
-            self.image = self.excited_image
             Timer(self.double_jump_cooldown, self.allow_double_jump).start()
             # self.allow_double_jump()
         else:
