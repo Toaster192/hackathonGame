@@ -1,4 +1,4 @@
-from src.PlaceholderGame import PlaceholderGame
+from src import PlaceholderGame
 import src.Config as Config
 
 
