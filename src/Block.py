@@ -12,7 +12,6 @@ class Block(GameObject):
 		self.speed = speed
 		self.falling = falling
 		self.color = color
-
         self.objects = map(lambda t: createBlock(t[0], t[1]), array)
 
     def createBlock(self, x, y):

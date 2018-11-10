@@ -42,11 +42,20 @@ class PlaceholderGame(Game):
         if keys[pygame.K_LEFT]:
             print(self.player1.x, Config.GAMEFIELD_LEFT_BORDER)
             self.player1.moveLeft()
+            self.player1.left = True
+            self.player1.right = False
+            self.player1.facing = False
         if keys[pygame.K_RIGHT]:
             print(self.player1.x, Config.GAMEFIELD_RIGHT_BORDER)
             self.player1.moveRight()
+            self.player1.left = False
+            self.player1.right = True
+            self.player1.facing = False
         if not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT]:
             self.player1.stopMoving()
+            self.player1.left = False
+            self.player1.right = False
+            self.player1.facing = True
         if keys[pygame.K_UP]:
             self.player1.jump()
 
