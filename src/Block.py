@@ -39,8 +39,9 @@ class Block(GameObject):
                                         Config.BLOCK_HEIGHT) *
                                        Config.BLOCK_HEIGHT)
                 self.speed = (0, 0)
-                event = pygame.event.Event(pygame.USEREVENT,
-                                           {"ev": "block_falled"})
+                #event = pygame.event.Event(pygame.USEREVENT,
+                #                           {"ev": "block_fell"})
+                event = pygame.event.Event(Config.BLOCK_FELL_EVENT)
                 pygame.event.post(event)
 
         for square in self.objects:

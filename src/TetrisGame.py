@@ -18,6 +18,7 @@ class TetrisGame(Game):
         self.generator = BlockGenerator()
         self.player1 = None
         self.blocks = [self.generator.generate(self.block_speed)]
+        self.dead = False
 
     # Gets called at the start of the game
     def init(self, window_name, size):
@@ -28,6 +29,9 @@ class TetrisGame(Game):
                               Config.PLAYER_HEIGHT, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
+        self.wasted_font = pygame.font.Font('FreeMono.ttf', 46)
+        self.wasted_surface = \
+                self.wasted_font.render('YOU DEAD!', True, Color.RED)
 
     # Gets called at game end (pressed [X])
     def clean_up(self):
@@ -36,8 +40,10 @@ class TetrisGame(Game):
     # Gets called on PyGame event
     def handle_event(self, event):
         # print(event)
-        if event.type == pygame.USEREVENT:
+        if event.type == Config.BLOCK_FELL_EVENT:
             self.blocks.append(self.generator.generate(self.block_speed))
+        elif event.type == Config.PLAYER_DEAD_EVENT:
+            self.dead = True
 
     # Called every frame, dt is time between frames
     def loop(self, dt):
@@ -71,5 +77,8 @@ class TetrisGame(Game):
         fps_surface = \
             self.fps_font.render('FPS: ' + str(self.fps), True, Color.GRAY)
         self.surface.blit(fps_surface, (0, 0))
+
+        if self.dead:
+            self.surface.blit(self.wasted_surface, (0, 50))
 
         pygame.display.update()

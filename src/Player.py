@@ -127,8 +127,10 @@ class Player:
         else:
             top_border = int(self.check_collision_up(surroundings))
             if int(self.pos.y) < top_border + self.v.y * dt:
-                self.v.y = 0
-                self.pos.y = top_border
+                self.v.y = Config.BLOCK_SPEED[1] * 1.5
+                self.pos.y = top_border + 3
+                event = pygame.event.Event(Config.PLAYER_DEAD_EVENT)
+                pygame.event.post(event)
 
         # self.emitter.pos = self.pos
         # self.emitter.update(dt)
