@@ -7,7 +7,13 @@ from src.Player import Player
 from .Particles import ParticleFieldEmitter
 from src.BlockGenerator import BlockGenerator
 from .Vector import Vector2
+import socket as s
+import pickle
 
+class Data:
+    def __init__(self, blocks, player):
+        self.blocks = blocks
+        self.player = player
 
 class TetrisGame(Game):
     def __init__(self):
@@ -19,8 +25,11 @@ class TetrisGame(Game):
         self.generator = BlockGenerator()
         self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
+        self.player2 = Player(100, 50,Config.PLAYER_WIDTH, Config.PLAYER_HEIGHT, Color.RED)
         self.blocks = [self.generator.generate(self.block_speed)]
-
+        self.socket = s.socket()
+        self.socket_out = s.socket()
+        self.smth = None
         self.emitter = ParticleFieldEmitter(
             colors=([Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED] + [
                 Color.GRAY] * 2 + [Color.DARK_GRAY,
@@ -34,10 +43,17 @@ class TetrisGame(Game):
     def init(self, window_name, size):
         super().init(window_name, size)
         self.fps_font = pygame.font.Font('FreeMono.ttf', 16)
+        host = "127.0.0.5"
+        port = 12345
+        self.socket.bind((host, port))
+        self.socket.listen(5)
+        self.smth, neco = self.socket.accept()
+
+        #self.socket_out.bind(("127.0.0.2", port))
 
     # Gets called at game end (pressed [X])
     def clean_up(self):
-        pass
+        self.socket.close()
 
     # Gets called on PyGame event
     def handle_event(self, event):
@@ -48,9 +64,13 @@ class TetrisGame(Game):
     # Called every frame, dt is time between frames
     def loop(self, dt):
         self.fps = 0 if dt == 0 else int(1 / dt)
-
+        d = Data(self.blocks, self.player1)
+        self.smth.send(pickle.dumps(d))
+        d = pickle.loads(self.smth.recv(16000))
+        self.player2 = d.player
         keys = pygame.key.get_pressed()
         self.player1.update(dt, keys, self.blocks)
+        self.player2.update(dt, keys, self.blocks)
 
         self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
 
@@ -74,6 +94,7 @@ class TetrisGame(Game):
             block.render(self.surface)
 
         self.player1.render(self.surface)
+        self.player2.render(self.surface)
 
         # self.emitter.render(self.surface)
 
