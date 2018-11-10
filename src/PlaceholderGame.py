@@ -1,4 +1,5 @@
 import pygame
+from src.GameField import GameField
 from src.Game import Game
 import src.Colors as Color
 import src.Config as Config
@@ -9,6 +10,7 @@ from src.Player import Player
 class PlaceholderGame(Game):
 
     def __init__(self):
+        self.game_field = GameField()
         super().__init__()
         self.fps_font = None
         self.fps = 0
