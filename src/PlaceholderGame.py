@@ -18,7 +18,7 @@ class PlaceholderGame(Game):
         super().__init__()
         self.fps_font = None
         self.fps = 0
-        self.block_speed = (0, 50)
+        self.block_speed = (0, 150)
         self.generator = BlockGenerator()
         self.player1 = Player(51, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
@@ -30,7 +30,7 @@ class PlaceholderGame(Game):
                                         Color.darker(Color.DARK_GRAY, 2),
                                         Color.BLACK]),
             pos=Vector2(256, 256), size=Vector2(32, 8), velocity=Vector2(16, -8),
-            velocity_jitter=Vector2(4, 4), accel=Vector2(0, -4), gen_delay=0.01,
+            velocity_jitter=Vector2(4, 4), accel=Vector2(0, -4), gen_delay=0.1,
             duration=4, sizes=[3, 5, 8, 6, 8, 16])
 
     # Gets called at the start of the game
@@ -46,7 +46,7 @@ class PlaceholderGame(Game):
     def handle_event(self, event):
         print(event)
         if event.type == pygame.USEREVENT:
-            self.blocks.append(self.generator.generate((0, 50)))
+            self.blocks.append(self.generator.generate(self.block_speed))
 
     # Called every frame, dt is time between frames
     def loop(self, dt):
@@ -110,7 +110,7 @@ class PlaceholderGame(Game):
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
 
-        self.blocks[len(self.blocks) - 1].move(dt)
+        self.blocks[len(self.blocks) - 1].move(dt, self.blocks[:-1])
 
         self.emitter.update(dt)
 

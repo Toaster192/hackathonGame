@@ -1,6 +1,7 @@
 from src.Square import Square
 from src.GameObject import GameObject
 import pygame
+import src.Config as Config
 
 
 class Block(GameObject):
@@ -23,18 +24,19 @@ class Block(GameObject):
         for square in self.objects:
             square.draw(surface)
 
-    def move(self, dt, *speed):
+    def move(self, dt, blocks, *speed):
         for square in self.objects:
-            if not square.detects_collision("horizontal","left"):
-                square.update(dt)
-            elif square.detects_collision("horizontal","left") and self.falling == True:
+            if square.detects_collision(blocks) and self.falling == True:
                 self.falling = False
                 for square in self.objects:
                     square.speed = (0, 0)
+                    #ONE-LINER - DON'T ASK, DON'T WANT ME TO DO ANYTHING WITH IT AGAIN
+                    square.bounds.y = Config.GAMEFIELD_BOTTOM_BORDER - 1 - \
+                                      ((Config.GAMEFIELD_BOTTOM_BORDER - (square.bounds.y)) // \
+                                       Config.BLOCK_HEIGHT) * Config.BLOCK_HEIGHT
                 self.speed = (0, 0)
-                square.update(dt)
-                print(speed)
                 event = pygame.event.Event(pygame.USEREVENT, {"ev": "block_falled"})
                 pygame.event.post(event)
-            elif square.detects_collision("horizontal","left") and self.falling == False:
-                square.update(dt)
+
+        for square in self.objects:
+            square.update(dt)
