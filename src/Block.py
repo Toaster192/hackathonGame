@@ -1,5 +1,6 @@
 from src.Square import Square
 from src.GameObject import GameObject
+import pygame
 
 
 class Block(GameObject):
@@ -31,5 +32,7 @@ class Block(GameObject):
                 self.falling = False
                 self.speed = self.speed / 2
                 square.update(dt)
+                event = pygame.event.Event(pygame.USEREVENT)
+                pygame.event.post(event)
             elif square.detects_collision() and self.falling == False:
                 square.update(dt)

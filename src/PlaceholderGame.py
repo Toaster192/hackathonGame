@@ -8,6 +8,7 @@ from src.Player import Player
 from .Particles import ParticleFieldEmitter
 from src.Block import Block
 import src.BlockTypes as BlockTypes
+from src.BlockGenerator import BlockGenerator
 
 
 class PlaceholderGame(Game):
@@ -18,7 +19,7 @@ class PlaceholderGame(Game):
         self.fps = 0
         self.player1 = Player(50, 50, Config.PLAYER_WIDTH,
                               Config.PLAYER_HEIGHT, Color.RED)
-        self.block = Block(5,100,256,256,BlockTypes.array[2],(0, 1),0,Color.BLACK)
+        self.block = BlockGenerator.generate((0,50))
 
         self.emitter = ParticleFieldEmitter(color_begin=Color.GRAY,
                                             color_end=Color.BLACK,
@@ -79,6 +80,8 @@ class PlaceholderGame(Game):
             self.player1.x = (Config.GAMEFIELD_RIGHT_BORDER -
                               Config.PLAYER_WIDTH)
 
+        if pygame.event.poll().type == pygame.USEREVENT:
+            self.block = BlockGenerator.generate((0,50))
         self.player1.x += self.player1.v_x
         self.player1.y += self.player1.v_y
 
