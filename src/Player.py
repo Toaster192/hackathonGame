@@ -61,7 +61,7 @@ class Player:
                Config.PLAYER_WIDTH) - self.v.x * dt):
             self.v.x = 0
             self.pos.x = (Config.GAMEFIELD_RIGHT_BORDER -
-                          Config.PLAYER_WIDTH)
+                          Config.PLAYER_WIDTH-1)
 
         if pygame.event.poll().type == pygame.USEREVENT:
             self.block = BlockGenerator.generate((0, 50))
