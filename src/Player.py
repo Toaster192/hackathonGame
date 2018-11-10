@@ -23,11 +23,13 @@ class Player:
         pygame.display.init()
         self.image = pygame.image.load('face.png')
         self.image.convert()
-        self.image = pygame.transform.scale(self.image, (Config.PLAYER_WIDTH, Config.PLAYER_WIDTH))
+        self.image = pygame.transform.scale(self.image,
+                                            (Config.PLAYER_WIDTH,
+                                             Config.PLAYER_WIDTH))
 
         self.emitter = ParticleFieldEmitter(
             colors=(
-                [Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED, Color.GRAY,
+                [Color.WHITE, Color.YELLOW, Color.ORANGE, Color.RED,
                  Color.GRAY, Color.DARK_GRAY, Color.darker(Color.DARK_GRAY, 2),
                  Color.BLACK]), pos=Vector2(0, 0),
             size=Vector2(Config.PLAYER_WIDTH, Config.PLAYER_HEIGHT),
@@ -112,7 +114,9 @@ class Player:
         pygame.draw.rect(surface, self.color,
                          pygame.Rect(self.pos.x, self.pos.y, self.size.x,
                                      self.size.y))
-        surface.blit(self.image, pygame.Rect(self.pos.x, self.pos.y, self.size.x, self.size.x))
+        surface.blit(self.image,
+                     pygame.Rect(self.pos.x, self.pos.y,
+                                 self.size.x, self.size.x))
         # self.emitter.render(surface)
 
     def calculate_surroundings(self, blocks):
@@ -120,34 +124,43 @@ class Player:
         for block in blocks:
             if self.pos.manhattan_distance(
                     Vector2(block.x,
-                            block.y)) < Config.COLLISION_DISTANCE * Config.BLOCK_WIDTH:
+                            block.y)) < (Config.COLLISION_DISTANCE *
+                                         Config.BLOCK_WIDTH):
                 around += block.objects
         return around
 
     def check_collision_right(self, surroundings):
         border = 1e6
         for square in surroundings:
-            if square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y < self.pos.y + Config.PLAYER_HEIGHT - 4:
+            if (square.bounds.x > self.pos.x + Config.PLAYER_WIDTH / 2 and
+               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+               self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = min(border, square.bounds.x)
         return border
 
     def check_collision_left(self, surroundings):
         border = -1e6
         for square in surroundings:
-            if square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y < self.pos.y + Config.PLAYER_HEIGHT - 4:
+            if (square.bounds.x + Config.BLOCK_WIDTH / 2 < self.pos.x and
+               self.pos.y - Config.BLOCK_HEIGHT < square.bounds.y <
+               self.pos.y + Config.PLAYER_HEIGHT - 4):
                 border = max(border, square.bounds.x + Config.BLOCK_WIDTH)
         return border
 
     def check_collision_down(self, surroundings):
         border = 1e6
         for square in surroundings:
-            if square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and self.pos.x - Config.BLOCK_WIDTH < square.bounds.x < self.pos.x + Config.PLAYER_WIDTH:
+            if (square.bounds.y > self.pos.y + Config.PLAYER_HEIGHT / 2 and
+               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+               self.pos.x + Config.PLAYER_WIDTH):
                 border = min(border, square.bounds.y)
         return border
 
     def check_collision_up(self, surroundings):
         border = -1e6
         for square in surroundings:
-            if square.bounds.y < self.pos.y and self.pos.x - Config.BLOCK_WIDTH < square.bounds.x < self.pos.x + Config.PLAYER_WIDTH:
+            if (square.bounds.y < self.pos.y and
+               self.pos.x - Config.BLOCK_WIDTH < square.bounds.x <
+               self.pos.x + Config.PLAYER_WIDTH):
                 border = max(border, square.bounds.y + Config.BLOCK_HEIGHT)
         return border
